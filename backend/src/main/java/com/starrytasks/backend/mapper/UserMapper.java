@@ -2,7 +2,9 @@ package com.starrytasks.backend.mapper;
 
 import com.starrytasks.backend.api.external.UserDTO;
 import com.starrytasks.backend.api.internal.User;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserMapper {
     public UserDTO map(User user) {
         return new UserDTO()
