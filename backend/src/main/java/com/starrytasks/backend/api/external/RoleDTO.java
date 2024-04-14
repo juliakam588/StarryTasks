@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
-public class UserDTO {
+public class RoleDTO {
     private Long id;
-    private String email;
+    private String name;
 }

@@ -7,7 +7,8 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
-public class UserDTO {
+public class CategoryDTO {
     private Long id;
-    private String email;
+    private String categoryName;
+
 }
