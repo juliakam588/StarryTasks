@@ -1,0 +1,237 @@
+.container1 {
+    background-color: #c5cff2;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 80px;
+    justify-content: center;
+}
+
+
+
+.addtask-main-content {
+    border-radius: 20px;
+    background-color: #fff;
+    align-self: center;
+    display: flex;
+    margin-top: 100px;
+    width: 925px;
+    max-width: 100%;
+    flex-direction: column;
+    align-items: start;
+    padding: 51px 80px;
+}
+
+
+
+.add-task-name {
+    border: none;
+    border-radius: 9px;
+    background-color: #eee;
+    align-self: center;
+    width: 554px;
+    max-width: 100%;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.61);
+    text-align: center;
+    justify-content: center;
+    padding: 26px 60px;
+    font: 400 24px Questrial, sans-serif;
+}
+
+
+
+.category-select {
+    border-radius: 8px;
+    background-color: rgba(238, 238, 238, 1);
+    border: 1px solid rgba(238, 238, 238, 1);
+    align-self: center;
+    display: flex;
+    margin-top: 25px;
+    width: 554px;
+    max-width: 100%;
+    gap: 20px;
+    font-size: 24px;
+    color: rgba(0, 0, 0, 0.61);
+    font-weight: 400;
+    padding: 23px 22px 23px 80px;
+    margin-bottom: 5%;
+}
+
+
+.category-text {
+    font-family: Questrial, sans-serif;
+    flex-grow: 1;
+    flex-basis: auto;
+}
+
+.category-icon {
+    aspect-ratio: 1;
+    object-fit: auto;
+    object-position: center;
+    width: 24px;
+    align-self: start;
+}
+
+.checklist {
+    display: flex;
+    justify-content: space-between;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+.checklist-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.day-container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    user-select: none;
+}
+
+.day-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+    border-radius: 5px;
+}
+
+.day-container:hover input~.checkmark {
+    background-color: #ccc;
+}
+
+.day-container input:checked~.checkmark {
+    background-color: #ffc107;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.day-container input:checked~.checkmark:after {
+    display: block;
+}
+
+.day-container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 7px;
+    height: 15px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+
+.reward-container {
+    display: flex;
+    gap: 17px;
+    align-items: center;
+    justify-content: center;
+    width: 554px;
+    max-width: 100%;
+}
+
+
+
+.star-icon {
+    object-fit: auto;
+    object-position: center;
+    width: 60px;
+}
+
+.star-input {
+    border-radius: 9px;
+    background-color: #eee;
+    align-self: start;
+    margin-top: 12px;
+    width: 225px;
+    height: 56px;
+    padding-left: 5px;
+    font: 400 24px Questrial, sans-serif;
+}
+
+.add-task-button {
+    border-radius: 20px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(2px);
+    background-color: #ffc100;
+    align-self: center;
+    display: flex;
+    margin-top: 68px;
+    width: 551px;
+    max-width: 100%;
+    gap: 20px;
+    font-size: 24px;
+    color: #fff;
+    font-weight: 400;
+    text-align: center;
+    padding: 8px 80px;
+    cursor: pointer;
+
+}
+
+
+.add-task-icon {
+    object-fit: auto;
+    object-position: center;
+    width: 70px;
+    max-width: 100%;
+}
+
+.add-task-text {
+    font-family: Questrial, sans-serif;
+    flex-grow: 1;
+    flex-basis: auto;
+    margin: auto 0;
+}
+
+@media (max-width: 991px) {
+
+    .addtask-main-content {
+        margin-top: 40px;
+        padding: 20px 20px;
+    }
+
+    .add-task-name {
+        padding: 15px 20px;
+    }
+
+    .container1 {
+        margin: 100px 10px 0 10px;
+    }
+
+
+    .category-select {
+        flex-wrap: wrap;
+        padding: 15px 20px;
+    }
+
+    .reward-container {
+        margin: 0;
+    }
+
+    .add-task-button {
+        flex-wrap: wrap;
+        margin-top: 40px;
+        padding: 0 20px;
+    }
+}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Header.css';
 import logo from '../../assets/images/logo.png';
 
@@ -13,9 +14,9 @@ const Header = () => {
       <label htmlFor="menu-bar" id="menu-label">&#9776;</label>
       <nav className="navbar">
         <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Rewards</a></li>
-          <li><a href="#">Me</a></li>
+        <li><Link to="/">Home</Link></li>
+          <li><Link to="/rewards">Rewards</Link></li>
+          <li><Link to="/stats">Stats</Link></li>
         </ul>
       </nav>
     </header>

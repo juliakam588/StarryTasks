@@ -13,10 +13,15 @@ body {
     padding: 0 60px 80px;
   }
 
-  @media (max-width: 991px) {
-    .login-card {
+
+  @media (max-width: 991px) { 
+    login-card {
       max-width: 100%;
       margin-top: 40px;
-      padding: 0 20px;
-    }
+      padding: 0;
+      
+  }
+
+
+
   }

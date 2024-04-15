@@ -1,231 +1,147 @@
+.container {
+  background-color: #c5cff2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .container {
-    background-color: #c5cff2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+
+.main-content {
+  margin-top: 61px;
+  width: 100%;
+  margin-left: 30px;
+
+}
+
+
+
+.content-wrapper {
+  gap: 20px;
+  display: flex;
+}
+
+
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  line-height: normal;
+  width: 37%;
+  margin-left: 0;
+}
+
+
+.greeting-section {
+  display: flex;
+  margin-top: 74px;
+  flex-direction: column;
+  font-size: 24px;
+  color: #504cff;
+}
+
+
+
+.greeting-text {
+  font-feature-settings: "clig" off, "liga" off;
+  letter-spacing: -1px;
+  align-self: center;
+  font: 700 48px/128% Poppins, sans-serif;
+}
+
+
+.progress-section {
+  display: flex;
+  margin-top: 90px;
+  gap: 20px;
+  font-weight: 400;
+  justify-content: center;
+}
+
+
+
+.progress-label {
+  font-family: Poppins, sans-serif;
+}
+
+.progress-bar {
+  border-radius: 40px;
+  border: 1px solid rgba(0, 0, 0, 0.48);
+  background-color: #ffc100;
+  width: 234px;
+  height: 14px;
+  margin: auto 0;
+}
+
+
+.right-column {
+  display: flex;
+  flex-direction: column;
+  line-height: normal;
+  width: 63%;
+  margin-left: 20px;
+}
+
+
+.congratulations-section {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  flex-direction: column;
+  font-size: 48px;
+  color: #504cff;
+  text-align: center;
+}
+
+
+
+.congratulations-image {
+  aspect-ratio: 1;
+  object-fit: auto;
+  object-position: center;
+  width: 50%;
+}
+
+
+
+.congratulations-text {
+  font-family: Poppins, sans-serif;
+  align-self: center;
+  margin-top: 25px;
+  font-weight: bolder;
+
+}
+
+@media (max-width: 991px) {
+
+  .right-column {
+    display: none;
   }
 
+  .progress-section {
+    padding-right: 20px;
+    margin-top: 40px;
+    margin-left: 30px;
+  }
 
+  .greeting-text {
+    font-size: 40px;
+  }
 
-  @media (max-width: 991px) {
-    .header {
-      max-width: 100%;
-      flex-wrap: wrap;
-    }
+  .left-column {
+    width: 100%;
+  }
+
+  .content-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
   }
 
 
   .main-content {
-    margin-top: 61px;
-    width: 100%;
-    margin-left: 30px;
-
-  }
-
-  @media (max-width: 991px) {
-    .main-content {
-      max-width: 100%;
-      margin-top: 40px;
-    }
-  }
-
-  .content-wrapper {
-    gap: 20px;
-    display: flex;
-  }
-
-  @media (max-width: 991px) {
-    .content-wrapper {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0;
-    }
-  }
-
-  .left-column {
-    display: flex;
-    flex-direction: column;
-    line-height: normal;
-    width: 37%;
     margin-left: 0;
-  }
+    margin-top: 40px;
 
-  @media (max-width: 991px) {
-    .left-column {
-      width: 100%;
-    }
-  }
-
-  .greeting-section {
-    display: flex;
-    margin-top: 74px;
-    flex-direction: column;
-    font-size: 24px;
-    color: #504cff;
-  }
-
-  @media (max-width: 991px) {
-    .greeting-section {
-      margin-top: 40px;
-    }
-  }
-
-  .greeting-text {
-    font-feature-settings: "clig" off, "liga" off;
-    letter-spacing: -1px;
-    align-self: center;
-    font: 700 48px/128% Poppins, sans-serif;
-  }
-
-  @media (max-width: 991px) {
-    .greeting-text {
-      font-size: 40px;
-    }
-  }
-
-  .progress-section {
-    display: flex;
-    margin-top: 90px;
-    gap: 20px;
-    font-weight: 400;
-    justify-content:center;
-  }
-
-  @media (max-width: 991px) {
-    .progress-section {
-      padding-right: 20px;
-      margin-top: 40px;
-    }
-  }
-
-  .progress-label {
-    font-family: Poppins, sans-serif;
-  }
-
-  .progress-bar {
-    border-radius: 40px;
-    border: 1px solid rgba(0, 0, 0, 0.48);
-    background-color: #ffc100;
-    width: 234px;
-    height: 14px;
-    margin: auto 0;
-  }
-
-  .tasks-section {
-    display: flex;
-    margin-top: 38px;
-    flex-direction: column;
-    color: #000;
-  }
-
-  .task-item {
-    border-radius: 37px;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(0, 0, 0, 0.22);
-    background-color: #fff;
-    display: flex;
-    gap: 20px;
-    justify-content: space-between;
-    padding: 18px 39px;
-    margin-bottom: 5%;
-  }
-
-  @media (max-width: 991px) {
-    .task-item {
-      padding: 0 20px;
-    }
-  }
-
-  .task-details {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .task-name {
-    font-family: Poppins, sans-serif;
-    font-weight: 300;
-  }
-
-  .task-reward {
-    display: flex;
-    margin-top: 16px;
-    gap: 12px;
-    font-weight: 500;
-    align-items: end;
-  }
-
-  .reward-icon {
-    object-position: center;
-    width: 30px;
-    fill: #f9d621;
-    alt: "Reward icon";
-  }
-
-  .task-icon {
-    aspect-ratio: 0.94;
-    object-fit: auto;
-    object-position: center;
-    width: 50px;
-    margin: auto 0;
-    alt: "Task icon";
-  }
-
-  .right-column {
-    display: flex;
-    flex-direction: column;
-    line-height: normal;
-    width: 63%;
-    margin-left: 20px;
-  }
-
-  @media (max-width: 991px) {
-    .right-column {
-      width: 100%;
-    }
-  }
-
-  .congratulations-section {
-    display: flex;
-    align-items: center;
-    flex-grow: 1;
-    flex-direction: column;
-    font-size: 48px;
-    color: #504cff;
-    text-align: center;
-  }
-
-  @media (max-width: 991px) {
-    .congratulations-section {
-      max-width: 100%;
-      margin-top: 40px;
-      font-size: 40px;
-    }
-  }
-
-  .congratulations-image {
-    aspect-ratio: 1;
-    object-fit: auto;
-    object-position: center;
-    width:70%;
-  }
-
-  @media (max-width: 991px) {
-    .congratulations-image {
-      max-width: 100%;
-    }
-  }
-
-  .congratulations-text {
-    font-family: Poppins, sans-serif;
-    align-self: center;
-    margin-top: 25px;
-    font-weight: bolder;
 
   }
-
-  @media (max-width: 991px) {
-    .congratulations-text {
-      font-size: 40px;
-    }
-  }
+}

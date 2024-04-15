@@ -1,0 +1,75 @@
+.child-avatar {
+    border-radius: 50%;
+    width: 160px;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
+.child-card {
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.22);
+    border-radius: 10px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+    line-height: normal;
+    margin-left: 0;
+    padding: 42px 75px;
+    text-align: center;
+
+}
+
+
+.child-name {
+    align-self: center;
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-weight: 500;
+    margin-top: 15px;
+}
+
+.rewards {
+    display: flex;
+    align-self: center;
+    gap: 5px;
+}
+
+.stars-icon {
+    width: 22px;
+}
+
+.tasks-btn {
+    background-color: #ffc100;
+    border: 1px solid rgba(0, 0, 0, 0.22);
+    border-radius: 10px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    color: #fff;
+    font-family: Questrial, sans-serif;
+    font-weight: 400;
+    justify-content: center;
+    margin-top: 15px;
+    padding: 8px 32px;
+    cursor: pointer;
+}
+
+
+@media (max-width: 991px) {
+
+    .child-card {
+        margin-top: 40px;
+        padding: 20px 30px;
+        white-space: initial;
+        width: 100%;
+        align-items: center;
+    }
+
+    .tasks-btn {
+        white-space: initial;
+    }
+
+    .child-avatar {
+        width: 80px;
+    }
+
+}

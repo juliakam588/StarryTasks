@@ -1,0 +1,121 @@
+.greeting {
+    margin-top: 90px;
+    color: #504cff;
+    font: 700 48px 'Poppins', sans-serif;
+    letter-spacing: -1px;
+    text-align: center;
+}
+
+.lesser-container {
+    padding-top: 60px;
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+}
+
+.calendar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    padding: 50px;
+}
+
+.nav-button {
+    background: #FFF;
+    border: none;
+    padding: 10px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.week {
+    display: flex;
+    background: #FFF;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 12px 0 30px 0px;
+}
+
+.day {
+    text-align: center;
+    margin: 0 10px;
+}
+
+.date {
+    display: block;
+    margin-top: 5px;
+}
+
+.task-list {
+    margin: 20px 0;
+}
+
+.task {
+    background: #FFF;
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.task-name {
+    font-size: 1.1em;
+}
+
+.task-status {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: block;
+    margin: 5px auto;
+}
+
+.completed {
+    background-color: #FFD700;
+}
+
+.not-completed {
+    background-color: #f44336;
+}
+
+.reward,
+.checkmark {
+    font-size: 1em;
+}
+
+.star {
+    color: #FFD700;
+}
+
+.checkmark {
+    color: #4CAF50;
+}
+
+.add-task {
+    background: #FFD700;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 1.2em;
+    cursor: pointer;
+    margin: 20px auto;
+    display: block;
+}
+
+
+@media (max-width: 991px) {
+
+    .lesser-container {
+        padding-top: 0;
+
+    }
+
+    .calendar {
+        padding: 0;
+    }
+}

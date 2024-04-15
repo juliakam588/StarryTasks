@@ -1,0 +1,78 @@
+.tasks-section {
+    display: flex;
+    margin-top: 38px;
+    flex-direction: column;
+    color: #000;
+    align-items: center;
+}
+
+.task-item {
+    border-radius: 37px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(0, 0, 0, 0.22);
+    background-color: #fff;
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    padding: 18px 39px;
+    margin-bottom: 5%;
+    width: 85%;
+}
+
+
+.task-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.task-name {
+    font-family: Poppins, sans-serif;
+    font-weight: 300;
+}
+
+.task-reward {
+    display: flex;
+    margin-top: 16px;
+    gap: 12px;
+    font-weight: 500;
+    align-items: end;
+}
+
+.reward-icon {
+    object-position: center;
+    width: 30px;
+    fill: #f9d621;
+    alt: "Reward icon";
+}
+
+.task-icon {
+    aspect-ratio: 0.94;
+    object-fit: auto;
+    object-position: center;
+    width: 50px;
+    margin: auto 0;
+    alt: "Task icon";
+}
+
+.task-check-button {
+    border: none;
+    background-color: white;
+    cursor: pointer;
+}
+
+@media (max-width: 991px) {
+
+    .task-item {
+        padding: 15px 20px;
+        margin: 0 1rem 1rem;
+        border-radius: 30px;
+        width: 90%;
+
+    }
+
+    .task-reward {
+        margin-top: 0;
+
+    }
+
+}

@@ -1,0 +1,57 @@
+.container {
+    background-color: #c5cff2;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 80px;
+  }
+
+  
+  .parent-main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+  }
+
+
+  .greeting {
+    margin-top: 90px;
+    color: #504cff;
+    font: 700 48px / 128% Poppins, sans-serif;
+    letter-spacing: -1px;
+    text-align: center;
+  }
+
+
+  .children-container {
+    margin-top: 59px;
+    max-width: 100%;
+  }
+
+
+  .children-list {
+    display: flex;
+    gap: 20px;
+  }
+
+
+
+  @media (max-width: 991px) { 
+
+    .children-list {
+        align-items: stretch;
+        flex-direction: row;
+        gap: 1.5rem;
+    
+    }
+    .children-container {
+        margin-top: 40px;
+    }
+    
+    .greeting {
+        font-size: 40px;
+        margin-left: 10px;
+      }
+
+
+  }

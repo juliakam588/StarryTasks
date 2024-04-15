@@ -1,4 +1,3 @@
-
 .login-container {
     background-color: #c5cff2;
     display: flex;
@@ -10,11 +9,7 @@
     padding: 80px 60px;
 }
 
-@media (max-width: 991px) {
-    .login-container {
-        padding: 0 20px;
-    }
-}
+
 
 .login-card {
     display: flex;
@@ -24,13 +19,6 @@
     align-items: center;
 }
 
-@media (max-width: 991px) {
-    .login-card {
-        max-width: 100%;
-        margin-top: 40px;
-        padding: 0 20px;
-    }
-}
 
 .logo-container {
     z-index: 10;
@@ -44,7 +32,7 @@
     aspect-ratio: 1;
     object-fit: auto;
     object-position: center;
-    width: 300px; /* Ajustar esto según sea necesario para que coincida en ambas páginas */
+    width: 300px;
     z-index: 10;
 }
 
@@ -55,14 +43,9 @@
     font: 400 64px Pacifico, sans-serif;
 }
 
-@media (max-width: 991px) {
-    .app-name {
-        font-size: 40px;
-    }
-}
 
 .login-box {
-    display:flex;
+    display: flex;
     flex-direction: column;
     width: 50%;
 }
@@ -79,12 +62,7 @@
     width: 100%;
 }
 
-@media (max-width: 991px) {
-    .input-field {
-        max-width: 100%;
-        padding: 0 20px;
-    }
-}
+
 
 .login-button {
     border-radius: 19px;
@@ -98,12 +76,6 @@
     width: 100%;
 }
 
-@media (max-width: 991px) {
-    .login-button {
-        max-width: 100%;
-        padding: 0 20px;
-    }
-}
 
 .visually-hidden {
     position: absolute;
@@ -115,4 +87,39 @@
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+
+@media (max-width: 991px) {
+    .login-container {
+        padding: 0 20px;
+    }
+
+
+    .login-card {
+        max-width: 100%;
+        margin-top: 40px;
+        padding: 0;
+    }
+
+    .app-name {
+        font-size: 40px;
+    }
+
+    .input-field {
+        max-width: 100%;
+    }
+
+    .login-button {
+        max-width: 100%;
+    }
+
+    .logo-container {
+        margin: 0;
+
+    }
+
+
+    .login-box {
+        width: 100%;
+    }
 }

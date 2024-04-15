@@ -1,0 +1,231 @@
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+
+.rewards-page {
+    background-color: #c5cff2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 80px;
+}
+
+
+.rewards-title {
+    color: #504cff;
+    text-align: center;
+    font-feature-settings: "clig" off, "liga" off;
+    letter-spacing: -1px;
+    margin-top: 100px;
+    font: 700 48px/128% Poppins, sans-serif;
+}
+
+
+.stars-container {
+    border-radius: 10px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(0, 0, 0, 0.22);
+    background-color: #fff;
+    margin-top: 75px;
+    width: 478px;
+    max-width: 100%;
+    padding: 32px 48px;
+}
+
+
+.stars-content {
+    display: flex;
+    gap: 20px;
+}
+
+
+.stars-text-col {
+    display: flex;
+    flex-direction: column;
+    line-height: normal;
+    width: 67%;
+    margin-left: 0;
+}
+
+
+.stars-text {
+    color: #000;
+    text-align: center;
+    margin-top: 12px;
+    font: 300 24px Poppins, sans-serif;
+}
+
+
+.stars-count-col {
+    display: flex;
+    flex-direction: column;
+    line-height: normal;
+    width: 33%;
+    margin-left: 20px;
+}
+
+
+.stars-count-wrapper {
+    display: flex;
+    flex-grow: 1;
+    gap: 0;
+    font-size: 32px;
+    color: #000;
+    font-weight: 400;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.stars-count {
+    font-family: Poppins, sans-serif;
+    align-self: flex-end;
+    z-index: 10;
+    margin-top: 10px;
+}
+
+.stars-img {
+    aspect-ratio: 2.13;
+    object-fit: contain;
+    width: 78px;
+}
+
+.rewards-list {
+    display: flex;
+    margin-top: 115px;
+    gap: 19px;
+    padding: 0 20px;
+}
+
+.reward-item {
+    border-radius: 22px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    padding: 16px 48px;
+}
+
+
+
+.reward-img {
+    aspect-ratio: 1;
+    object-fit: contain;
+    width: 117px;
+}
+
+.reward-name {
+    color: #000;
+    text-align: center;
+    margin-top: 19px;
+    font: 400 20px Questrial, sans-serif;
+}
+
+.reward-progress {
+    align-self: stretch;
+    display: flex;
+    margin-top: 23px;
+    gap: 0;
+}
+
+.reward-progress-filled {
+    border: 1px solid rgba(0, 0, 0, 0.48);
+    background-color: #ffc100;
+    z-index: 10;
+    width: 67px;
+    height: 27px;
+}
+
+.reward-progress-empty {
+    border: 1px solid rgba(0, 0, 0, 0.48);
+    background-color: #fff;
+    width: 67px;
+    height: 27px;
+}
+
+.exchange-btn {
+    border-radius: 19px;
+    background-color: #504cff;
+    margin-top: 50px;
+    width: 479px;
+    max-width: 100%;
+    color: #fff;
+    white-space: nowrap;
+    text-align: center;
+    justify-content: center;
+    padding: 19px 60px;
+    font: 700 24px Outfit, sans-serif;
+}
+
+@media (max-width: 991px) {
+    .exchange-btn {
+        margin-top: 40px;
+        white-space: initial;
+    }
+
+    .reward-item {
+        padding: 19px 15px;
+        flex: 0;
+    }
+
+    .rewards-list {
+
+        flex-wrap: wrap;
+        margin-top: 40px;
+        justify-content: center;
+    }
+
+    .reward-progress-empty {
+        width: 60px;
+        height: 20px;
+    }
+
+    .reward-progress-filled {
+        width: 60px;
+        height: 20px;
+    }
+
+
+    .stars-count-col {
+        width: 100%;
+    }
+
+    .stars-text {
+        margin-top: 0;
+        font-size: 16px;
+    }
+
+    .stars-text-col {
+        width: 100%;
+    }
+
+    .stars-content {
+        flex-direction: row;
+        gap: 0;
+        align-items: center;
+        padding: 1rem;
+        width: 100%;
+    }
+
+    .stars-container {
+        margin-top: 40px;
+        padding: 0 20px;
+        width: 85%;
+    }
+
+    .rewards-title {
+        margin-top: 40px;
+        font-size: 40px;
+    }
+
+    .reward-name {
+        max-width: 100px;
+
+    }
+
+    .reward-img {
+        width: 60px;
+    }
+}
