@@ -1,15 +1,14 @@
 package com.starrytasks.backend.api.external;
-
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
-public class UserProfileDTO {
-    private String name;
-    private String profilePictureUrl;
-    private Integer currentStars;
+public class FamilyOverviewDTO {
+    private String parentName;
+    private List<UserProfileDTO> children;
 }

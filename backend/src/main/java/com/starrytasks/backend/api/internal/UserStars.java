@@ -14,6 +14,8 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class UserStars {
     @Id
+    private Long id;
+
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "user_id")

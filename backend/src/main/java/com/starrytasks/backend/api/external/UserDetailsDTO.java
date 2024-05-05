@@ -1,6 +1,5 @@
 package com.starrytasks.backend.api.external;
-
-
+import com.starrytasks.backend.api.internal.Role;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -8,8 +7,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
-public class UserProfileDTO {
-    private String name;
-    private String profilePictureUrl;
-    private Integer currentStars;
+public class UserDetailsDTO {
+    private Role role;
+    private boolean hasParent;
 }

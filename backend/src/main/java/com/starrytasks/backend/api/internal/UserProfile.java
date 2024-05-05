@@ -24,6 +24,13 @@ public class UserProfile {
     @MapsId
     @JoinColumn(name = "user_id")
     private User user;
+    @Override
+    public String toString() {
+        return "UserProfile{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 
 
 }

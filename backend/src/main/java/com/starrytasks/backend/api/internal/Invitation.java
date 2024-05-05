@@ -29,4 +29,11 @@ public class Invitation {
 
     @Column(nullable = false)
     private boolean isActive;
+
+    @Transient
+    public boolean isExpired() {
+        return expirationDate.isBefore(LocalDate.now());
+    }
+
+
 }

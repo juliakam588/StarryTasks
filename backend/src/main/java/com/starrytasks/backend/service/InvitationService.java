@@ -8,9 +8,6 @@ public interface InvitationService {
     InvitationDTO get();
     InvitationDTO generateNewInvitationForUser(Long userId);
     InvitationDTO getByInvitationCode(String invitationCode);
-    boolean acceptInvitation(String invitationCode);
-    boolean declineInvitation(String invitationCode);
-    boolean deactivateInvitation(String invitationCode);
+    boolean acceptInvitation(String invitationCode, Long id);
 
-    List<InvitationDTO> findAll();
 }
