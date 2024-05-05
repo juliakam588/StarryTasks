@@ -9,13 +9,14 @@ import Stats from './pages/Stats';
 import Parent from './pages/Parent';
 import Rewards from './pages/Rewards';
 import AddTask from './pages/AddTask';
+import Invitation from './pages/Invitation';
 
 
 const App = () => {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<HomePage />} />
+                <Route path="/child" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/child-task" element={<ChildTask />} />
@@ -24,6 +25,7 @@ const App = () => {
                 <Route path="/parent" element={<Parent />} />
                 <Route path="/rewards" element={<Rewards />} />
                 <Route path="/add-task" element={<AddTask />} />
+                <Route path="/invitation" element={<Invitation />} />
             </Routes>
         </Router>
     );

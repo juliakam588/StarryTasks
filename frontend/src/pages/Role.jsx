@@ -1,44 +1,56 @@
 import React, { useState, useEffect } from 'react';
-import axios from '../../axiosConfig'; // Make sure this path is correct
-import familyImage from '../assets/images/role.png';
+import { useNavigate } from 'react-router-dom';
+import axios from '../../axiosConfig';
 import '../assets/styles/Role.css';
+import familyImage from '../assets/images/role.png'
 
 const Role = () => {
     const [roles, setRoles] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('/api/auth/roles')
+        axios.get('/api/auth/roles', {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
             .then(response => {
                 setRoles(response.data);
             })
-            .catch(error => console.error('Error fetching roles', error));
-    }, []);
-
-    // Function to handle role selection
-    const handleRoleSelection = (role) => {
-        console.log(`Role selected: ${role.name}`); // Log to the console which role was selected
-
-        // Send the selected role to the backend
-        axios.post('/api/auth/roles/select', role)
-            .then(response => {
-                console.log('Role selection successful:', response.data);
-                // You can do something here after the role has been successfully posted
-            })
             .catch(error => {
-                console.error('Error posting role selection:', error);
-                // Handle errors here
+                console.error('Error fetching roles', error);
+                alert('Failed to fetch roles, please login again');
+                navigate('/login');
             });
+    }, [navigate]);
+
+    const handleRoleSelection = async (role) => {
+        try {
+            const response = await axios.post('/api/auth/roles/select', { name: role.name }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            alert('Role selection successful');
+            if (role.name === 'Parent') {
+                navigate('/parent');
+            } else if (role.name === 'Child') {
+                navigate('/invitation');
+            }
+        } catch (error) {
+            console.error('Error posting role selection:', error);
+            alert('Failed to select role');
+        }
     };
+
 
     return (
         <main className="parent-child-container">
             <div className="role-content-wrapper">
                 <img src={familyImage} alt="Family portrait" className="family-image" />
-                {roles.map(role => (
-                    <button key={role.id} className="child-label" onClick={() => handleRoleSelection(role)}>
-                        {role.name}
-                    </button>
-                ))}
+            {roles.map(role => (
+                <button key={role.id} className="child-label" onClick={() => handleRoleSelection(role)}>{role.name}</button>
+            ))}
             </div>
         </main>
     );

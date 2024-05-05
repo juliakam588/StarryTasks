@@ -1,35 +1,32 @@
-import React from 'react';
-import starIcon from '../assets/images/Star-Png-164.png';
-import check from '../assets/images/task-check-button.png';
-
-import './TaskList.css';
-
-const TaskItem = ({ taskName, reward }) => {
-  return (
-    <article className="task-item">
-      <div className="task-details">
-        <h4 className="task-name">{taskName}</h4>
-        <div className="task-reward">
-          <div className="reward-label">Reward:</div>
-          <div className="reward-amount">{reward}</div>
-          <img src={starIcon} className="reward-icon" alt="Reward icon" />
-        </div>
-      </div>
-      <button className="task-check-button">
-        <img src={check} className="task-icon"/>
-      </button>
-    </article>
-  );
-};
+import React, { useState, useEffect } from 'react';
+import TaskItem from './TaskItem';
 
 const TaskList = ({ tasks }) => {
-  return (
-    <div className="tasks-section">
-      {tasks.map((task, index) => (
-        <TaskItem key={index} taskName={task.name} reward={task.reward} />
-      ))}
-    </div>
-  );
+    const [taskState, setTaskState] = useState(tasks.map(task => ({
+        ...task,
+        isCompleted: false
+    })));
+
+    const toggleCompletion = (index) => {
+        const newTasks = [...taskState];
+        newTasks[index].isCompleted = !newTasks[index].isCompleted;
+        setTaskState(newTasks);
+        // Optionally, update the backend here
+    };
+
+    return (
+        <div className="tasks-section">
+            {taskState.map((task, index) => (
+                <TaskItem
+                    key={index}
+                    taskName={task.name}
+                    reward={task.reward}
+                    isCompleted={task.isCompleted}
+                    toggleCompletion={() => toggleCompletion(index)}
+                />
+            ))}
+        </div>
+    );
 };
 
 export default TaskList;
