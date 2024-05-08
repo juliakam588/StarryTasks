@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import AuthenticationCard from '../components/AuthenticationCard';
 import axios from '../../axiosConfig';
 import '../assets/styles/Register.css';
@@ -9,7 +9,32 @@ const RegisterPage = () => {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [selectedPicture, setSelectedPicture] = useState(null);
     const navigate = useNavigate();
+
+    const onFileSelected = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedPicture(file);
+
+        }
+    };
+    const upload = async () => {
+        if (selectedPicture) {
+            const formData = new FormData();
+            formData.append('file', selectedPicture);
+            try {
+                await axios.post('/api/users/avatar', formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                });
+                navigate('/login');
+            } catch (error) {
+                console.error('Upload failed:', error.response.data, localStorage.getItem("token"));
+            }
+        }
+    };
 
     const handleRegister = async (event) => {
         event.preventDefault();
@@ -24,7 +49,8 @@ const RegisterPage = () => {
                 password: password,
             });
             localStorage.setItem('token', response.data.token);
-            navigate('/login');
+            await upload();
+
         } catch (error) {
             console.error('Registration failed:', error.response.data);
             alert('Registration failed');
@@ -36,10 +62,15 @@ const RegisterPage = () => {
             <span className="join-clause">Join us!</span>
             <form className="login-box" onSubmit={handleRegister}>
                 <div>
-                    <input type="email" id="email" placeholder="Email" className="input-field" value={email} onChange={e => setEmail(e.target.value)} />
-                    <input type="text" id="name" placeholder="First name" className="input-field" value={name} onChange={e => setName(e.target.value)} />
-                    <input type="password" id="password" placeholder="Password" className="input-field" value={password} onChange={e => setPassword(e.target.value)} />
-                    <input type="password" id="confirm-password" placeholder="Confirm password" className="input-field" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
+                    <input type="email" id="email" placeholder="Email" className="input-field" value={email}
+                           onChange={e => setEmail(e.target.value)}/>
+                    <input type="text" id="name" placeholder="First name" className="input-field" value={name}
+                           onChange={e => setName(e.target.value)}/>
+                    <input type="password" id="password" placeholder="Password" className="input-field" value={password}
+                           onChange={e => setPassword(e.target.value)}/>
+                    <input type="password" id="confirm-password" placeholder="Confirm password" className="input-field"
+                           value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}/>
+                    <input type="file" name="cover-select" id="formFile" accept="image/*" onChange={onFileSelected}/>
                     <button type="submit" className="login-button">Register</button>
                 </div>
             </form>

@@ -10,6 +10,7 @@ import Parent from './pages/Parent';
 import Rewards from './pages/Rewards';
 import AddTask from './pages/AddTask';
 import Invitation from './pages/Invitation';
+import Calendar from './components/DateCalendarServerRequest.jsx';
 
 
 const App = () => {
@@ -19,12 +20,12 @@ const App = () => {
                 <Route path="/child" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
-                <Route path="/child-task" element={<ChildTask />} />
+                <Route path="/child-task/:childId/tasks" element={<ChildTask />} />
                 <Route path="/role" element={<Role />} />
                 <Route path="/stats" element={<Stats />} />
                 <Route path="/parent" element={<Parent />} />
                 <Route path="/rewards" element={<Rewards />} />
-                <Route path="/add-task" element={<AddTask />} />
+                <Route path="/add-task/:childId" element={<AddTask />} />
                 <Route path="/invitation" element={<Invitation />} />
             </Routes>
         </Router>

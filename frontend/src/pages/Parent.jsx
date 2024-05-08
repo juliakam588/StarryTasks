@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Axios from 'axios';
+import axios from '../../axiosConfig';
 import Header from '../components/Header/Header';
 import ChildCard from '../components/ChildCard';
 import PlusSign from '../assets/images/plus-sign.png';
@@ -7,33 +7,32 @@ import '../assets/styles/Parent.css';
 
 const Parent = () => {
     const [parentName, setParentName] = useState('');
-    const [children, setChildren] = useState([]);
     const [invitationCode, setInvitationCode] = useState('');
+    const [children, setChildren] = useState([]);
 
     useEffect(() => {
         const fetchFamilyData = async () => {
             try {
-                const response = await Axios.get('/api/parent/overview', {
+                const response = await axios.get('/api/parent/overview', {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
                 });
                 setParentName(response.data.parentName);
-                setChildren(response.data.children);
+                setChildren(response.data.children || []);
             } catch (error) {
                 console.error('Error fetching family data:', error);
+                setChildren([]);
             }
         };
 
         fetchFamilyData();
     }, []);
 
+
     const handleAddChild = async () => {
         try {
-            const response = await Axios.post('/api/invitations/generate-for-user', {}, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
+            const response = await axios.post('/api/invitations/generate-for-user', {}, {
             });
             setInvitationCode(response.data.invitationCode);
             alert(`Invitation code: ${response.data.invitationCode} - Give this code to your child to join.`);
@@ -52,9 +51,10 @@ const Parent = () => {
                     <div className="children-list">
                         {children.map(child => (
                             <ChildCard
-                                key={child.name}
+                                key={child.id}
+                                id={child.id}
                                 name={child.name}
-                                avatarSrc={child.profilePictureUrl}
+                                avatarSrc={child.profilePicture}
                                 stars={child.currentStars}
                             />
                         ))}
