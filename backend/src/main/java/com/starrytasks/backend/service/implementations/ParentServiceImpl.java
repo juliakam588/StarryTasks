@@ -33,9 +33,10 @@ public class ParentServiceImpl implements ParentService {
 
         List<UserProfileDTO> childrenDTOs = children.stream()
                 .map(child -> {
+
                     UserProfile profile = userProfileRepository.findByUserId(child.getId());
                     UserStars stars = userStarsRepository.findByUserId(child.getId());
-                    return userProfileMapper.map(profile, stars);
+                    return userProfileMapper.map(profile, stars, child.getId());
                 })
                 .collect(Collectors.toList());
 
@@ -44,5 +45,12 @@ public class ParentServiceImpl implements ParentService {
         familyOverviewDTO.setChildren(childrenDTOs);
 
         return familyOverviewDTO;
+    }
+
+    @Override
+    public UserProfileDTO getChildDetails(Long childId) {
+        UserProfile profile = userProfileRepository.findByUserId(childId);
+        UserStars stars = userStarsRepository.findByUserId(childId);
+        return userProfileMapper.map(profile, stars, childId);
     }
 }

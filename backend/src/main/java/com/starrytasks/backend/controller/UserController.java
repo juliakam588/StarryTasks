@@ -2,20 +2,28 @@ package com.starrytasks.backend.controller;
 
 import com.starrytasks.backend.api.external.UserDTO;
 import com.starrytasks.backend.api.external.StatusResponseDTO;
+import com.starrytasks.backend.api.external.UserProfileDTO;
+import com.starrytasks.backend.api.internal.User;
 import com.starrytasks.backend.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Parameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
 
-    private UserService userService;
+    private final UserService userService;
 
 
     @GetMapping("/parent/{parentId}/children")
@@ -33,6 +41,15 @@ public class UserController {
         return new UserDTO()
                 .setId(id)
                 .setEmail("example@example.com");
+    }
+
+    @PostMapping(value = "/avatar", consumes = "multipart/form-data")
+    public ResponseEntity<?> uploadBookCoverPicture(
+            @RequestPart("file") MultipartFile file,
+            Authentication connectedUser
+    ) {
+        userService.uploadBookCoverPicture(file, connectedUser);
+        return ResponseEntity.accepted().build();
     }
 
     @PutMapping("/{id}")

@@ -2,6 +2,9 @@ package com.starrytasks.backend.controller;
 
 import com.starrytasks.backend.api.external.CategoryDTO;
 import com.starrytasks.backend.api.external.StatusResponseDTO;
+import com.starrytasks.backend.api.internal.Category;
+import com.starrytasks.backend.repository.CategoryRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +13,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/categories")
+@RequiredArgsConstructor
 public class CategoryController {
+    private final CategoryRepository categoryRepository;
 
     @GetMapping("/{categoryId}")
     public CategoryDTO getCategory(@PathVariable Long categoryId) {
@@ -21,11 +26,8 @@ public class CategoryController {
 
 
     @GetMapping
-    public List<CategoryDTO> getAllCategories() {
-        return List.of(new CategoryDTO()
-                .setId(1L)
-                .setCategoryName("Cleaning")
-        );
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAll();
     }
 
     @PostMapping

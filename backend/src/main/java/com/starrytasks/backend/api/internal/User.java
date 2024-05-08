@@ -1,5 +1,6 @@
 package com.starrytasks.backend.api.internal;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,6 +32,7 @@ public class User implements UserDetails {
     private String password;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
+    @JsonManagedReference
     private UserProfile userProfile;
 
     @ManyToOne(fetch = FetchType.EAGER)

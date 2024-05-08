@@ -1,8 +1,6 @@
 package com.starrytasks.backend.repository;
 
 
-import com.starrytasks.backend.api.internal.User;
-import com.starrytasks.backend.api.internal.UserProfile;
 import com.starrytasks.backend.api.internal.UserStars;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
