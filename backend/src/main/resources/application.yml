@@ -9,13 +9,20 @@ spring:
   jpa:
     showSql: 'true'
     hibernate:
-      ddl-auto: 'create-drop'
+      ddl-auto: 'update'
     properties:
       hibernate:
         dialect: 'org.hibernate.dialect.PostgreSQLDialect'
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 application:
   security:
     jwt:
       secret-key: ce31b8fc58de3469a819fd8f5886e296074211f972f4d8583ca4e880d7287d1b
       expiration: 86400000
+  file:
+    upload:
+      photos: ./uploads
