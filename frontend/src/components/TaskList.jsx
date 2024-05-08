@@ -1,28 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import TaskItem from './TaskItem';
 
-const TaskList = ({ tasks }) => {
-    const [taskState, setTaskState] = useState(tasks.map(task => ({
-        ...task,
-        isCompleted: false
-    })));
+const TaskList = ({ tasks, onToggleCompletion }) => {
 
-    const toggleCompletion = (index) => {
-        const newTasks = [...taskState];
-        newTasks[index].isCompleted = !newTasks[index].isCompleted;
-        setTaskState(newTasks);
-        // Optionally, update the backend here
+    useEffect(() => {
+        console.log('Tasks updated:', tasks);
+    }, [tasks]);
+
+    const toggleCompletion = (taskId) => {
+        if (onToggleCompletion) {
+            onToggleCompletion(taskId);
+        }
     };
 
     return (
         <div className="tasks-section">
-            {taskState.map((task, index) => (
+            {tasks.map((task, index) => (
                 <TaskItem
-                    key={index}
-                    taskName={task.name}
-                    reward={task.reward}
+                    key={task.taskId || index}
+                    taskName={task.taskName}
+                    reward={task.assignedStars}
                     isCompleted={task.isCompleted}
-                    toggleCompletion={() => toggleCompletion(index)}
+                    toggleCompletion={() => toggleCompletion(task.taskId)}
                 />
             ))}
         </div>
