@@ -5,17 +5,18 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.Set;
-
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
-public class TaskDTO {
-    private Long taskId;
+public class AddTaskDTO {
     private String name;
+    private String categoryName;
     private Integer stars;
-    private Long categoryId;
-    private Long userId;
     private Set<DayOfWeek> scheduledDays;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private Long childId;
 
 }

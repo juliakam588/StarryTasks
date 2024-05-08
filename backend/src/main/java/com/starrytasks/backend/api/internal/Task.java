@@ -38,6 +38,11 @@ public class Task {
     private Category category;
 
 
-    @OneToMany(mappedBy = "task")
+    @OneToMany(mappedBy = "task", cascade = CascadeType.REMOVE)
     private Set<TaskSchedule> schedules;
+
+    @Override
+    public int hashCode() {
+        return 31 + ((taskId == null) ? 0 : taskId.hashCode());
+    }
 }
