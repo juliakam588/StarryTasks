@@ -7,7 +7,6 @@
 }
 
 
-
 .addtask-main-content {
     border-radius: 20px;
     background-color: #fff;
@@ -146,8 +145,7 @@
     gap: 17px;
     align-items: center;
     justify-content: center;
-    width: 554px;
-    max-width: 100%;
+    width: 100%;
 }
 
 

@@ -30,6 +30,7 @@ body {
   }
 
   .parent-label, .child-label {
+    cursor: pointer;
     font-family: Poppins, sans-serif;
     border-radius: 19px;
     width: 472px;
@@ -55,6 +56,9 @@ body {
     margin-top: 37px;
   }
 
+.parent-label, .child-label:hover {
+  background-color: #fff;
+}
 
   @media (max-width: 991px) {
 
