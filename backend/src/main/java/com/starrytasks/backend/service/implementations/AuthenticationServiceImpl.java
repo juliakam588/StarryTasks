@@ -36,7 +36,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         UserProfile userProfile = new UserProfile();
         userProfile.setName(request.getFirstName());
-        userProfile.setProfilePicturePath(request.getProfilePicturePath());
 
         User user = new User();
         user.setEmail(request.getEmail());

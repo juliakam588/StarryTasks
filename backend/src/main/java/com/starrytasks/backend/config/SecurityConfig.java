@@ -31,10 +31,13 @@ public class SecurityConfig {
                                 "/api/auth/login",
                                 "/api/auth/register",
                                 "/api/auth/roles",
-                                "api/auth/roles/select"
+                                "api/auth/roles/select",
+                                "/api/categories",
+                                "/api/tasks/**"
                         )
                         .permitAll()
-                        .requestMatchers("/api/parent/**").permitAll()
+                        .requestMatchers("/api/parent/**")
+                        .hasAuthority("Parent")
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/child/**"
