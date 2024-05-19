@@ -36,12 +36,9 @@ public class SecurityConfig {
                                 "/api/tasks/**"
                         )
                         .permitAll()
-                        .requestMatchers("/api/parent/**")
-                        .hasAuthority("Parent")
-                        .requestMatchers(
-                                HttpMethod.GET,
-                                "/api/child/**"
-                        ).hasAuthority("Child")
+                        .requestMatchers("/api/parent/**").hasAuthority("Parent")
+                        .requestMatchers("/api/rewards/parent").hasAuthority("Parent")
+                        .requestMatchers("/api/child/**").hasAuthority("Child")
                         .anyRequest()
                         .authenticated())
                 .sessionManagement(sessionManagement -> sessionManagement

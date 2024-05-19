@@ -20,4 +20,6 @@ public interface TaskService {
     List<TasksDTO> findTasksForChildByDate(Long childId, LocalDate date);
 
     List<TasksDTO> findTasksScheduledBetweenAndChildId(LocalDate startDate, LocalDate endDate, Long childId);
+
+    void toggleTaskCompletion(Long taskId);
 }

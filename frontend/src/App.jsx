@@ -10,7 +10,8 @@ import Parent from './pages/Parent';
 import Rewards from './pages/Rewards';
 import AddTask from './pages/AddTask';
 import Invitation from './pages/Invitation';
-import Calendar from './components/DateCalendarServerRequest.jsx';
+import ParentRewards from './pages/ParentRewards';
+
 
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
                 <Route path="/rewards" element={<Rewards />} />
                 <Route path="/add-task/:childId" element={<AddTask />} />
                 <Route path="/invitation" element={<Invitation />} />
+                <Route path="/parent-rewards" element={<ParentRewards />} />
             </Routes>
         </Router>
     );

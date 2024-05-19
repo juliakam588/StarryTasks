@@ -1,12 +1,11 @@
 import React from 'react';
 import starIcon from '../assets/images/Star-Png-164.png';
-import check from '../assets/images/task-check-button.png';
-
+import TaskCheckbox from './TaskCheckbox.jsx';
 import './TaskList.css';
 
-const TaskItem = ({ taskName, reward, isCompleted, toggleCompletion }) => {
+const TaskItem = ({ taskName, reward, isCompleted = false, toggleCompletion }) => {
     const handleToggle = () => {
-        toggleCompletion(); // This will be passed down from TaskList to change state
+        toggleCompletion();
     };
 
     return (
@@ -19,9 +18,8 @@ const TaskItem = ({ taskName, reward, isCompleted, toggleCompletion }) => {
                     <img src={starIcon} className="reward-icon" alt="Reward icon" />
                 </div>
             </div>
-            <button className="task-check-button" onClick={handleToggle}>
-                <img src={check} className="task-icon" alt="Check icon"/>
-            </button>
+            <TaskCheckbox checked={isCompleted} onChange={handleToggle} />
+
         </article>
     );
 };

@@ -79,7 +79,11 @@ public class TaskController {
         return ResponseEntity.ok(tasks);
     }
 
-
+    @PutMapping("/{id}/toggle-completion")
+    public ResponseEntity<StatusResponseDTO> toggleTaskCompletion(@PathVariable Long id) {
+        taskService.toggleTaskCompletion(id);
+        return ResponseEntity.ok(new StatusResponseDTO(200));
+    }
 
 }
 

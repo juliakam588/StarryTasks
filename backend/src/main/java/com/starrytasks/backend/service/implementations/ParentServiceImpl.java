@@ -53,4 +53,14 @@ public class ParentServiceImpl implements ParentService {
         UserStars stars = userStarsRepository.findByUserId(childId);
         return userProfileMapper.map(profile, stars, childId);
     }
+
+    @Override
+    public Boolean isParentOfChild(Long parentId, Long childId) {
+        return userRepository.existsByIdAndParentId(childId, parentId);
+    }
+
+    @Override
+    public List<User> getChildrenOfParent(Long parentId) {
+        return userRepository.findByParentId(parentId);
+    }
 }

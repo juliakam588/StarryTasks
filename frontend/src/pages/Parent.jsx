@@ -13,11 +13,7 @@ const Parent = () => {
     useEffect(() => {
         const fetchFamilyData = async () => {
             try {
-                const response = await axios.get('/api/parent/overview', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
+                const response = await axios.get('/api/parent/overview', {});
                 setParentName(response.data.parentName);
                 setChildren(response.data.children || []);
             } catch (error) {

@@ -17,8 +17,13 @@
     padding: 18px 39px;
     margin-bottom: 5%;
     width: 85%;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
+.task-item.completed {
+    background-color: rgb(255 255 255 / 40%);
+    transform: scale(1.02);
+}
 
 .task-details {
     display: flex;
@@ -28,6 +33,7 @@
 .task-name {
     font-family: Poppins, sans-serif;
     font-weight: 300;
+    transition: text-decoration 0.3s ease;
 }
 
 .task-reward {
@@ -45,9 +51,12 @@
     alt: "Reward icon";
 }
 
+.task-item.completed .task-details .task-name {
+    text-decoration: line-through;
+}
+
 .task-icon {
     aspect-ratio: 0.94;
-    object-fit: auto;
     object-position: center;
     width: 50px;
     margin: auto 0;
@@ -58,7 +67,9 @@
     border: none;
     background-color: white;
     cursor: pointer;
+    transition: filter 0.3s ease;
 }
+
 
 @media (max-width: 991px) {
 

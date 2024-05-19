@@ -15,7 +15,7 @@ public class UserProfileMapper {
         dto.setName(userProfile.getName());
         dto.setProfilePicture(FileUtils.readFileFromLocation(userProfile.getProfilePicturePath()));
         if (userStars != null) {
-            dto.setCurrentStars(userStars.getCurrentStars());
+            dto.setCurrentStars(userStars.getTotalStars());
         }
         return dto;
     }

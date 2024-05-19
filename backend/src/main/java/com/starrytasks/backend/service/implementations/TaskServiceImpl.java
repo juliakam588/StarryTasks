@@ -3,6 +3,7 @@ package com.starrytasks.backend.service.implementations;
 import com.starrytasks.backend.api.external.AddTaskDTO;
 import com.starrytasks.backend.api.external.TaskDetailsDTO;
 import com.starrytasks.backend.api.external.TasksDTO;
+import com.starrytasks.backend.api.external.UserRewardDTO;
 import com.starrytasks.backend.api.internal.*;
 import com.starrytasks.backend.repository.*;
 import com.starrytasks.backend.service.TaskService;
@@ -24,6 +25,8 @@ public class TaskServiceImpl implements TaskService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final TaskScheduleRepository taskScheduleRepository;
+    private final UserStarsRepository userStarsRepository;
+
 
     @Transactional
     @Override
@@ -162,6 +165,30 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TasksDTO> findTasksScheduledBetweenAndChildId(LocalDate startDate, LocalDate endDate, Long childId) {
         return taskScheduleRepository.findAllByDateRangeAndChildId(startDate, endDate, childId);
+    }
+
+    @Override
+    public void toggleTaskCompletion(Long taskId) {
+        UserTask userTask = userTaskRepository.findByTask_TaskId(taskId);
+        UserStars userStars = userStarsRepository.findByUserId(userTask.getUser().getId());
+        if (userStars != null) {
+            boolean isCompleted = userTask.getStatus().getName().equals("Completed");
+            userTask.setStatus(new Status().setStatusId(isCompleted ? 2L : 1L).setName(isCompleted ? "Processed" : "Completed"));
+            if(userTask.getStatus().getStatusId() == 2L) {
+                int subtract = userStars.getTotalStars() - userTask.getTask().getAssignedStars();
+                if(subtract < 0) {
+                    subtract = 0;
+                }
+                userStars.setTotalStars(subtract);
+            } else {
+                userStars.setTotalStars(userStars.getTotalStars() + userTask.getTask().getAssignedStars());
+            }
+            userStarsRepository.save(userStars);
+            userTaskRepository.save(userTask);
+
+        } else {
+            throw new RuntimeException("Task not found");
+        }
     }
 
 }

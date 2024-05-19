@@ -29,4 +29,6 @@ public interface UserTaskRepository extends JpaRepository<UserTask, Long> {
             "WHERE ut.user.id = :childId AND ts.scheduledDate = :date")
     List<TasksDTO> findTasksForChildByScheduledDate(@Param("childId") Long childId, @Param("date") LocalDate date);
 
+    UserTask findByTask_TaskId(Long taskId);
+
 }

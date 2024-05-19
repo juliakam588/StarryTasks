@@ -7,12 +7,6 @@ const TaskList = ({ tasks, onToggleCompletion }) => {
         console.log('Tasks updated:', tasks);
     }, [tasks]);
 
-    const toggleCompletion = (taskId) => {
-        if (onToggleCompletion) {
-            onToggleCompletion(taskId);
-        }
-    };
-
     return (
         <div className="tasks-section">
             {tasks.map((task, index) => (
@@ -20,8 +14,8 @@ const TaskList = ({ tasks, onToggleCompletion }) => {
                     key={task.taskId || index}
                     taskName={task.taskName}
                     reward={task.assignedStars}
-                    isCompleted={task.isCompleted}
-                    toggleCompletion={() => toggleCompletion(task.taskId)}
+                    isCompleted={task.completed}
+                    toggleCompletion={() => onToggleCompletion(task.taskId)}
                 />
             ))}
         </div>
