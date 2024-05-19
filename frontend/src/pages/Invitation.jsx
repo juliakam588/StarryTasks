@@ -16,9 +16,7 @@ const Invitation = () => {
         event.preventDefault();
         if (invitationCode.trim()) {
             try {
-                await axios.post(`/api/invitations/${invitationCode}/accept`, {}, {
-                    headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
-                });
+                await axios.post(`/api/invitations/${invitationCode}/accept`, {}, {});
                 alert('Successfully joined the family!');
                 navigate('/child');
             } catch (error) {

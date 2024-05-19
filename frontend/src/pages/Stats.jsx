@@ -7,7 +7,7 @@ const Stats = () => {
 
         <>
             <Header />
-            <h1 class="greeting">Stats</h1></>
+            <h1 className="greeting">Stats</h1></>
 
     );
 };

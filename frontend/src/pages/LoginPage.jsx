@@ -31,11 +31,7 @@ const LoginPage = () => {
 
     const fetchUserDetails = async () => {
         try {
-            const response = await axios.get('/api/auth/user-details', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
+            const response = await axios.get('/api/auth/user-details', {});
 
 
 

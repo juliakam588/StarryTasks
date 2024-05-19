@@ -9,11 +9,7 @@ const Role = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('/api/auth/roles', {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
+        axios.get('/api/auth/roles', {})
             .then(response => {
                 setRoles(response.data);
             })
@@ -26,11 +22,7 @@ const Role = () => {
 
     const handleRoleSelection = async (role) => {
         try {
-            const response = await axios.post('/api/auth/roles/select', { name: role.name }, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
+            const response = await axios.post('/api/auth/roles/select', { name: role.name }, {});
             alert('Role selection successful');
             if (role.name === 'Parent') {
                 navigate('/parent');
