@@ -91,6 +91,10 @@
     width: 78px;
 }
 
+.decision-btn:hover{
+    color: #007BFF;
+}
+
 .rewards-list {
     display: flex;
     margin-top: 115px;
@@ -106,9 +110,17 @@
     align-items: center;
     flex: 1;
     padding: 16px 48px;
+    width: 100%;
 }
 
+.reward-item:hover, .reward-item:focus {
+    background-color: #f0f0f0;
+}
 
+.reward-item-selected {
+    background-color: #f0f0f0;
+    border: 1px solid #007BFF;
+}
 
 .reward-img {
     aspect-ratio: 1;
@@ -145,6 +157,26 @@
     height: 27px;
 }
 
+.child-rewards{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.child-rewards-content{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.reward-item{
+    margin: 1rem;
+}
+.parent-rewards-page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 .exchange-btn {
     border-radius: 19px;
     background-color: #504cff;

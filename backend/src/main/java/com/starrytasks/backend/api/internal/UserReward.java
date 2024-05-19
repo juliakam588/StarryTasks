@@ -25,6 +25,6 @@ public class UserReward {
     private LocalDate redemptionDate;
 
     @Column(nullable = false)
-    private Integer quantity;
+    private boolean isGranted = false;
 
 }

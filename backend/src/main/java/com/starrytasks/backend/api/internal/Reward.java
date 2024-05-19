@@ -18,15 +18,17 @@ public class Reward {
     @Column(name = "reward_id")
     private Long rewardId;
 
-    @ManyToOne(optional = true)
-    @JoinColumn(name = "reward_template_id")
-    private RewardTemplate rewardTemplate;
-
-    @Column(nullable = true)
-    private String customName;
+    @Column(nullable = false)
+    private String name;
 
     @Column(nullable = false)
-    private Integer costInStars;
+    private Integer defaultCostInStars;
+
+    @Column(nullable = false)
+    private Boolean isDefault;
+
+    @Column(nullable = true)
+    private String imageUrl;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = true)
