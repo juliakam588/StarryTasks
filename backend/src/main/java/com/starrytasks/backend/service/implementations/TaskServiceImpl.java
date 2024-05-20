@@ -1,9 +1,6 @@
 package com.starrytasks.backend.service.implementations;
 
-import com.starrytasks.backend.api.external.AddTaskDTO;
-import com.starrytasks.backend.api.external.TaskDetailsDTO;
-import com.starrytasks.backend.api.external.TasksDTO;
-import com.starrytasks.backend.api.external.UserRewardDTO;
+import com.starrytasks.backend.api.external.*;
 import com.starrytasks.backend.api.internal.*;
 import com.starrytasks.backend.repository.*;
 import com.starrytasks.backend.service.TaskService;
@@ -26,7 +23,6 @@ public class TaskServiceImpl implements TaskService {
     private final UserRepository userRepository;
     private final TaskScheduleRepository taskScheduleRepository;
     private final UserStarsRepository userStarsRepository;
-
 
     @Transactional
     @Override

@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,8 +18,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import java.io.IOException;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -38,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        final String authHeader = request.getHeader("Authorization");
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String jwtToken;
         final String userEmail;
 
@@ -67,22 +70,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
-
-                filterChain.doFilter(request, response);
             }
-        }  catch (ExpiredJwtException e) {
-            handleException(response, "JWT Token expired.", HttpServletResponse.SC_UNAUTHORIZED);
-        } catch (Exception e) {
-            handleException(response, e.getMessage(), HttpServletResponse.SC_FORBIDDEN);
+            filterChain.doFilter(request, response);
+        } catch (ExpiredJwtException e) {
+            handleException(response, e.getMessage());
         }
     }
 
-    private void handleException(HttpServletResponse response, String message, int status) throws IOException {
-        response.setStatus(status);
-        String errorJson = String.format("{\"error\": \"Unauthorized\", \"message\": \"%s\"}", message);
+    private void handleException(HttpServletResponse response, String message) throws IOException {
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(errorJson);
-    }
 
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Unauthorized");
+        errorResponse.put("message", message);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonErrorResponse = objectMapper.writeValueAsString(errorResponse);
+
+        response.getWriter().write(jsonErrorResponse);
+    }
 }

@@ -1,6 +1,7 @@
 package com.starrytasks.backend.repository;
 
 import com.starrytasks.backend.api.external.TasksDTO;
+import com.starrytasks.backend.api.internal.Task;
 import com.starrytasks.backend.api.internal.TaskSchedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -30,5 +31,8 @@ public interface TaskScheduleRepository extends JpaRepository<TaskSchedule, Long
     List<TasksDTO> findAllByDateRangeAndChildId(@Param("startDate") LocalDate startDate,
                                                 @Param("endDate") LocalDate endDate,
                                                 @Param("childId") Long childId);
+
+
+    TaskSchedule findTaskScheduleByTask(Task task);
 }
 

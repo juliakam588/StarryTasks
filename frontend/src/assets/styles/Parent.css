@@ -15,11 +15,12 @@
 
 
   .greeting {
-    margin-top: 90px;
     color: #504cff;
     font: 700 48px / 128% Poppins, sans-serif;
     letter-spacing: -1px;
     text-align: center;
+    margin-top: 70px;
+
   }
 
 
@@ -51,6 +52,7 @@
     .greeting {
         font-size: 40px;
         margin-left: 10px;
+        margin-top: 0;
       }
 
 
