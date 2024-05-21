@@ -14,7 +14,6 @@ const ChildTasksPage = () => {
     const [selectedDate, setSelectedDate] = useState(dayjs());
     const { childId } = useParams();
 
-
     useEffect(() => {
         async function fetchChildDetails() {
             try {
@@ -31,6 +30,14 @@ const ChildTasksPage = () => {
         setTasks(tasks);
     };
 
+    const handleUpdateTask = (taskId, updatedTask) => {
+        setTasks(tasks.map(task => (task.taskId === taskId ? { ...task, ...updatedTask } : task)));
+    };
+
+    const handleDeleteTask = (taskId) => {
+        setTasks(tasks.filter(task => task.taskId !== taskId));
+    };
+
     return (
         <div className="container">
             <Header />
@@ -44,6 +51,19 @@ const ChildTasksPage = () => {
                 <TaskList
                     key={selectedDate.format('YYYY-MM-DD')}
                     tasks={tasks}
+                    onToggleCompletion={(taskId) => {
+                        axios.put(`/api/tasks/${taskId}/toggle-completion`)
+                            .then(response => {
+                                setTasks(tasks.map(task => (task.taskId === taskId ? { ...task, completed: !task.completed } : task)));
+                            })
+                            .catch(error => {
+                                console.error('Failed to toggle task completion:', error);
+                            });
+                    }}
+                    onUpdateTask={handleUpdateTask}
+                    onDeleteTask={handleDeleteTask}
+                    currentDate={selectedDate}
+                    childId={childId}
                 />
                 <Link to={`/add-task/${childId}`}>
                     <AddButton iconSrc={plusSign} buttonText="Add Task" />

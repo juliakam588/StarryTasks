@@ -10,10 +10,10 @@ import java.util.List;
 
 public interface TaskService {
     void saveTask(AddTaskDTO task, Long parentId);
+
     List<TaskDetailsDTO> getTasksByChildId(Long childId);
 
-
-    void updateTask(Long id, TaskDetailsDTO taskDTO);
+    void updateTask(Long id, TasksDTO taskDTO);
 
     void deleteTask(Long id);
 
@@ -22,4 +22,6 @@ public interface TaskService {
     List<TasksDTO> findTasksScheduledBetweenAndChildId(LocalDate startDate, LocalDate endDate, Long childId);
 
     void toggleTaskCompletion(Long taskId);
+
+    TasksDTO getTaskById(Long id);
 }

@@ -58,31 +58,22 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
-    public void updateTask(Long taskId, TaskDetailsDTO taskDTO) {
-        Optional<Task> taskOptional = taskRepository.findById(taskId);
-        if (taskOptional.isPresent()) {
-            Task task = taskOptional.get();
-            task.setCustomName(taskDTO.getTaskName());
-            task.setAssignedStars(taskDTO.getAssignedStars());
-            task.setCategory(categoryRepository.findByName(taskDTO.getCategoryName()));
+    public void updateTask(Long userTaskId, TasksDTO userTaskDTO) {
+        UserTask userTask = userTaskRepository.findById(userTaskId)
+                .orElseThrow(() -> new RuntimeException("UserTask not found for the given ID: " + userTaskId));
+        Task task = userTask.getTask();
+        TaskSchedule taskSchedule = taskScheduleRepository.findTaskScheduleByTask(task);
 
-            taskScheduleRepository.deleteAll(task.getSchedules());
-            Set<TaskSchedule> schedules = new HashSet<>();
-            for (DayOfWeek day : taskDTO.getScheduledDays()) {
-                List<LocalDate> dates = calculateDates(day, taskDTO.getStartDate(), taskDTO.getEndDate());
-                for (LocalDate date : dates) {
-                    TaskSchedule schedule = new TaskSchedule();
-                    schedule.setTask(task);
-                    schedule.setScheduledDate(date);
-                    schedules.add(schedule);
-                }
-            }
-            task.setSchedules(schedules);
 
-            taskRepository.save(task);
-        } else {
-            System.out.println("Task not found for the given ID: " + taskId);
-        }
+        task.setCustomName(userTaskDTO.getTaskName());
+        task.setAssignedStars(userTaskDTO.getAssignedStars());
+        task.setCategory(categoryRepository.findByName(userTaskDTO.getCategoryName()));
+
+        taskSchedule.setScheduledDate(userTaskDTO.getScheduledDate());
+
+        taskRepository.save(task);
+        userTaskRepository.save(userTask);
+        taskScheduleRepository.save(taskSchedule);
     }
 
 
@@ -105,11 +96,17 @@ public class TaskServiceImpl implements TaskService {
         }).collect(Collectors.toList());
     }
 
+
     @Transactional
     @Override
     public void deleteTask(Long taskId) {
         Task task = taskRepository.findByTaskId(taskId);
         if (task != null) {
+            LocalDate today = LocalDate.now();
+            if (task.getSchedules().stream().anyMatch(schedule -> schedule.getScheduledDate().isBefore(today)) || userTaskRepository.findByTask_TaskId(taskId).getStatus().getName().equals("Completed")) {
+                throw new RuntimeException("Cannot delete past or completed tasks");
+            }
+
             userTaskRepository.deleteUserTaskByTask(task);
             taskScheduleRepository.deleteAll(task.getSchedules());
             taskRepository.deleteById(taskId);
@@ -186,5 +183,22 @@ public class TaskServiceImpl implements TaskService {
             throw new RuntimeException("Task not found");
         }
     }
+    @Override
+    public TasksDTO getTaskById(Long taskId) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task not found for the given ID: " + taskId));
 
+        TasksDTO dto = new TasksDTO();
+        dto.setTaskId(task.getTaskId());
+        dto.setTaskName(task.getCustomName());
+        dto.setAssignedStars(task.getAssignedStars());
+        dto.setCategoryName(task.getCategory() != null ? task.getCategory().getName() : null);
+        dto.setScheduledDate(task.getSchedules().stream()
+                .map(TaskSchedule::getScheduledDate)
+                .findFirst()
+                .orElse(null));
+
+        return dto;
+    }
 }
+

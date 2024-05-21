@@ -28,7 +28,7 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<StatusResponseDTO> updateTask(@PathVariable Long id, @RequestBody TaskDetailsDTO taskDTO) {
+    public ResponseEntity<StatusResponseDTO> updateTask(@PathVariable Long id, @RequestBody TasksDTO taskDTO) {
         taskService.updateTask(id, taskDTO);
         return ResponseEntity.ok(new StatusResponseDTO(200));
     }
@@ -83,6 +83,11 @@ public class TaskController {
     public ResponseEntity<StatusResponseDTO> toggleTaskCompletion(@PathVariable Long id) {
         taskService.toggleTaskCompletion(id);
         return ResponseEntity.ok(new StatusResponseDTO(200));
+    }
+    @GetMapping("/{taskId}/edit")
+    public ResponseEntity<TasksDTO> getTaskDetailsForEdit(@PathVariable Long taskId) {
+        TasksDTO task = taskService.getTaskById(taskId);
+        return ResponseEntity.ok(task);
     }
 
 }

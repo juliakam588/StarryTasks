@@ -11,6 +11,7 @@ import Rewards from './pages/Rewards';
 import AddTask from './pages/AddTask';
 import Invitation from './pages/Invitation';
 import ParentRewards from './pages/ParentRewards';
+import EditTaskForm from './pages/EditTask';
 
 
 
@@ -29,6 +30,7 @@ const App = () => {
                 <Route path="/add-task/:childId" element={<AddTask />} />
                 <Route path="/invitation" element={<Invitation />} />
                 <Route path="/parent-rewards" element={<ParentRewards />} />
+                <Route path="/edit-task/:childId/:taskId" element={<EditTaskForm />} />
             </Routes>
         </Router>
     );
