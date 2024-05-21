@@ -133,31 +133,32 @@ public class TaskServiceImpl implements TaskService {
                 .map(schedule -> {
                     Task task = taskRepository.findByTaskId(schedule.getTaskId());
                     UserTask userTask = userTaskRepository.findByTask_TaskIdAndUserId(task.getTaskId(), childId);
-                    System.out.println("Task ID: " + task.getTaskId());
-                    System.out.println("Scheduled Date: " + schedule.getScheduledDate());
-                    if (userTask != null) {
-                        System.out.println("User Task Status: " + userTask.getStatus().getName());
-                    } else {
-                        System.out.println("User Task is null for task ID: " + task.getTaskId());
+                    if (userTask == null) {
+                        throw new RuntimeException("UserTask not found for the given ID: " + task.getTaskId());
                     }
                     return new TasksDTO(
                             task.getTaskId(),
                             task.getCustomName(),
                             task.getAssignedStars(),
                             schedule.getScheduledDate(),
-                            userTask != null && userTask.getStatus().getName().equals("Completed"),
+                            userTask.getStatus().getName().equals("Completed"),
                             task.getCategory().getName()
                     );
                 })
                 .collect(Collectors.toList());
-        System.out.println("Tasks DTO List: " + tasksDTOList);
         return tasksDTOList;
     }
 
-
     @Override
     public List<TasksDTO> findTasksScheduledBetweenAndChildId(LocalDate startDate, LocalDate endDate, Long childId) {
-        return taskScheduleRepository.findAllByDateRangeAndChildId(startDate, endDate, childId);
+        List<TasksDTO> allTasks = new ArrayList<>();
+        LocalDate date = startDate;
+        while (!date.isAfter(endDate)) {
+            List<TasksDTO> dailyTasks = findTasksForChildByDate(childId, date);
+            allTasks.addAll(dailyTasks);
+            date = date.plusDays(1);
+        }
+        return allTasks;
     }
 
     @Override
