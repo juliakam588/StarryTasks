@@ -45,7 +45,6 @@ const ChildTasksPage = () => {
                 <h1 className="greeting">{childName}'s Tasks</h1>
                 <DateCalendarServerRequest
                     childId={childId}
-                    currentDate={selectedDate}
                     onDaySelect={handleDayChange}
                 />
                 <TaskList
@@ -62,7 +61,6 @@ const ChildTasksPage = () => {
                     }}
                     onUpdateTask={handleUpdateTask}
                     onDeleteTask={handleDeleteTask}
-                    currentDate={selectedDate}
                     childId={childId}
                 />
                 <Link to={`/add-task/${childId}`}>

@@ -26,7 +26,32 @@ function ServerDay(props) {
 export default function DateCalendarServerRequest({ childId, onDaySelect }) {
     const [currentDate, setCurrentDate] = useState(dayjs());
     const [tasks, setTasks] = useState([]);
+    const [highlightedDays, setHighlightedDays] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+
+    const fetchTasksForMonth = (date) => {
+        setIsLoading(true);
+
+        const startOfMonth = date.startOf('month').format('YYYY-MM-DD');
+        const endOfMonth = date.endOf('month').format('YYYY-MM-DD');
+
+        axios.get(`/api/tasks/scheduled`, {
+            params: {
+                startDate: startOfMonth,
+                endDate: endOfMonth,
+                childId: childId,
+            },
+        })
+            .then(response => {
+                const taskDates = response.data.map(task => task.scheduledDate);
+                setHighlightedDays(taskDates);
+                setIsLoading(false);
+            })
+            .catch(error => {
+                console.error('Failed to fetch task dates', error);
+                setIsLoading(false);
+            });
+    };
 
     const fetchTasksForDate = (date) => {
         setIsLoading(true);
@@ -39,20 +64,27 @@ export default function DateCalendarServerRequest({ childId, onDaySelect }) {
                 setIsLoading(false);
             })
             .catch(error => {
+                console.error('Failed to fetch tasks for date', error);
                 setIsLoading(false);
             });
     };
 
     useEffect(() => {
         onDaySelect(tasks);
-    }, [tasks])
+    }, [tasks]);
 
     useEffect(() => {
+        fetchTasksForMonth(currentDate);
         fetchTasksForDate(currentDate);
     }, [currentDate, childId]);
 
+    const handleMonthChange = (newDate) => {
+        fetchTasksForMonth(newDate);
+    };
+
     const handleDayChange = (newDate) => {
         setCurrentDate(newDate);
+        fetchTasksForDate(newDate);
     };
 
     return (
@@ -60,6 +92,7 @@ export default function DateCalendarServerRequest({ childId, onDaySelect }) {
             <DateCalendar
                 value={currentDate}
                 onChange={handleDayChange}
+                onMonthChange={handleMonthChange}
                 loading={isLoading}
                 renderLoading={() => <DayCalendarSkeleton />}
                 slots={{
@@ -67,12 +100,10 @@ export default function DateCalendarServerRequest({ childId, onDaySelect }) {
                 }}
                 slotProps={{
                     day: {
-                        highlightedDays: tasks.map(task => task.scheduledDate),
-
+                        highlightedDays,
                     },
                 }}
             />
         </LocalizationProvider>
     );
-
 }
