@@ -4,6 +4,9 @@ import Header from '../components/Header/Header';
 import ChildCard from '../components/ChildCard';
 import PlusSign from '../assets/images/plus-sign.png';
 import '../assets/styles/Parent.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const Parent = () => {
     const [parentName, setParentName] = useState('');
@@ -25,16 +28,38 @@ const Parent = () => {
         fetchFamilyData();
     }, []);
 
-
     const handleAddChild = async () => {
         try {
-            const response = await axios.post('/api/invitations/generate-for-user', {}, {
-            });
+            const response = await axios.post('/api/invitations/generate-for-user', {});
             setInvitationCode(response.data.invitationCode);
-            alert(`Invitation code: ${response.data.invitationCode} - Give this code to your child to join.`);
+            toast(
+                <div>
+                    <span>Invitation code: {response.data.invitationCode}</span>
+                    <CopyToClipboard text={response.data.invitationCode}>
+                        <button onClick={() => toast.success("Copied to clipboard!")}>Copy</button>
+                    </CopyToClipboard>
+                </div>,
+                {
+                    position: "top-center",
+                    autoClose: false,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                }
+            );
         } catch (error) {
             console.error('Failed to generate invitation:', error);
-            alert('Failed to generate invitation');
+            toast.error('Failed to generate invitation', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }
     };
 
@@ -60,6 +85,7 @@ const Parent = () => {
                     <img src={PlusSign} alt="Add child icon" className="add-task-icon" />
                     <span className="add-task-text">Add Child</span>
                 </button>
+                <ToastContainer />
             </main>
         </div>
     );
