@@ -2,6 +2,7 @@ package com.starrytasks.backend.service.implementations;
 
 import com.starrytasks.backend.api.external.*;
 import com.starrytasks.backend.api.internal.*;
+import com.starrytasks.backend.rabbitmq.NotificationProducer;
 import com.starrytasks.backend.repository.*;
 import com.starrytasks.backend.service.TaskService;
 import jakarta.transaction.Transactional;
@@ -23,6 +24,7 @@ public class TaskServiceImpl implements TaskService {
     private final UserRepository userRepository;
     private final TaskScheduleRepository taskScheduleRepository;
     private final UserStarsRepository userStarsRepository;
+    private final NotificationProducer notificationProducer;
 
     @Transactional
     @Override
@@ -176,6 +178,14 @@ public class TaskServiceImpl implements TaskService {
                 userStars.setTotalStars(subtract);
             } else {
                 userStars.setTotalStars(userStars.getTotalStars() + userTask.getTask().getAssignedStars());
+
+                User parent = userTask.getUser().getParent();
+                String parentEmail = parent.getEmail();
+                String taskName = userTask.getTask().getCustomName();
+                String childName = userTask.getUser().getUserProfile().getName();
+                String message = String.format("Task: %s, Child: %s, ParentEmail: %s", taskName, childName, parentEmail);
+
+                notificationProducer.sendNotification(message);
             }
             userStarsRepository.save(userStars);
             userTaskRepository.save(userTask);

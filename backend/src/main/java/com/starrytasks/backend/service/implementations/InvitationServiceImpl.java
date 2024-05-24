@@ -4,9 +4,11 @@ import com.starrytasks.backend.api.external.InvitationDTO;
 import com.starrytasks.backend.api.external.UserDTO;
 import com.starrytasks.backend.api.internal.Invitation;
 import com.starrytasks.backend.api.internal.User;
+import com.starrytasks.backend.api.internal.UserStars;
 import com.starrytasks.backend.mapper.InvitationMapper;
 import com.starrytasks.backend.repository.InvitationRepository;
 import com.starrytasks.backend.repository.UserRepository;
+import com.starrytasks.backend.repository.UserStarsRepository;
 import com.starrytasks.backend.service.InvitationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ public class InvitationServiceImpl implements InvitationService {
     private final InvitationMapper invitationMapper;
     private final InvitationRepository invitationRepository;
     private final UserRepository userRepository;
+    private final UserStarsRepository userStarsRepository;
 
 
     @Override
@@ -91,6 +94,12 @@ public class InvitationServiceImpl implements InvitationService {
 
                 invitation.setActive(false);
                 invitationRepository.save(invitation);
+
+                UserStars userStars = new UserStars();
+                userStars.setTotalStars(0);
+                userStars.setStarsSpent(0);
+                userStars.setUser(child);
+                userStarsRepository.save(userStars);
 
                 return true;
             }

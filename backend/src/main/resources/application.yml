@@ -1,4 +1,22 @@
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: youremail@gmail.com
+    password: yourpassword
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            trust: smtp.gmail.com
+
+  rabbitmq:
+    host: localhost
+    port: 5672
   jackson:
     defaultPropertyInclusion: "non_null"
   datasource:
@@ -26,3 +44,6 @@ application:
   file:
     upload:
       photos: ./uploads
+
+app:
+  url: http://localhost:5173
