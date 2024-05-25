@@ -29,11 +29,6 @@ public class InvitationServiceImpl implements InvitationService {
 
 
     @Override
-    public InvitationDTO get() {
-        return null;
-    }
-
-    @Override
     public InvitationDTO getByInvitationCode(String invitationCode) {
         return invitationRepository.findInvitationByInvitationCode(invitationCode)
                 .map(invitationMapper::map)
@@ -44,6 +39,10 @@ public class InvitationServiceImpl implements InvitationService {
     public InvitationDTO generateNewInvitationForUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if(!hasUserValidInvitation(user)) {
+
+        }
 
         String invitationCode = generateRandomCode(8);
         LocalDate expirationDate = LocalDate.now().plusDays(30);
@@ -107,5 +106,18 @@ public class InvitationServiceImpl implements InvitationService {
         return false;
     }
 
+    @Override
+    public boolean hasUserValidInvitation(User user) {
+        return invitationRepository.findInvitationByGeneratedByUser(user)
+                .map(Invitation::isActive)
+                .orElse(false);
+    }
+
+    @Override
+    public InvitationDTO getInvitationByUser(User user) {
+        return invitationRepository.findInvitationByGeneratedByUser(user)
+                .map(invitationMapper::map)
+                .orElseThrow(() -> new RuntimeException("Invitation not found"));
+    }
 
 }

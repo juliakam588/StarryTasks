@@ -38,9 +38,14 @@ public class InvitationController {
         if (currentUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        InvitationDTO newInvitation = invitationService.generateNewInvitationForUser(currentUser.getId());
-        if (newInvitation != null) {
-            return new ResponseEntity<>(newInvitation, HttpStatus.CREATED);
+        InvitationDTO invitationDTO;
+        if(invitationService.hasUserValidInvitation(currentUser))  {
+            invitationDTO = invitationService.getInvitationByUser(currentUser);
+            return ResponseEntity.ok(invitationDTO);
+        }
+        invitationDTO = invitationService.generateNewInvitationForUser(currentUser.getId());
+        if (invitationDTO != null) {
+            return new ResponseEntity<>(invitationDTO, HttpStatus.CREATED);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
