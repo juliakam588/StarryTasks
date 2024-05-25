@@ -62,16 +62,14 @@ export default function DateCalendarServerRequest({ childId, onDaySelect }) {
             .then(response => {
                 setTasks(response.data || []);
                 setIsLoading(false);
+                onDaySelect(response.data || [], date);
             })
             .catch(error => {
                 console.error('Failed to fetch tasks for date', error);
                 setIsLoading(false);
+                onDaySelect([], date);
             });
     };
-
-    useEffect(() => {
-        onDaySelect(tasks);
-    }, [tasks]);
 
     useEffect(() => {
         fetchTasksForMonth(currentDate);

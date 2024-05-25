@@ -31,4 +31,16 @@ public interface UserTaskRepository extends JpaRepository<UserTask, Long> {
 
     UserTask findByTask_TaskId(Long taskId);
 
+    @Query("SELECT new com.starrytasks.backend.api.external.TasksDTO(" +
+            "ut.task.taskId, " +
+            "ut.task.customName, " +
+            "ut.task.assignedStars, " +
+            "ts.scheduledDate, " +
+            "(CASE WHEN ut.status.name = 'Completed' THEN true ELSE false END), " +
+            "ut.task.category.name) " +
+            "FROM UserTask ut " +
+            "JOIN ut.task.schedules ts " +
+            "JOIN ut.task.category c " +
+            "WHERE ut.user.id = :childId AND ts.scheduledDate = :date AND c.name = :categoryName")
+    List<TasksDTO> findTasksForChildByScheduledDateAndCategory(@Param("childId") Long childId, @Param("date") LocalDate date, @Param("categoryName") String categoryName);
 }

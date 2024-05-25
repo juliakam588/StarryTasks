@@ -24,4 +24,6 @@ public interface TaskService {
     void toggleTaskCompletion(Long taskId);
 
     TasksDTO getTaskById(Long id);
+
+    List<TasksDTO> findTasksForChildByDateAndCategory(Long childId, LocalDate date, String categoryName);
 }

@@ -211,5 +211,29 @@ public class TaskServiceImpl implements TaskService {
 
         return dto;
     }
+
+    @Override
+    public List<TasksDTO> findTasksForChildByDateAndCategory(Long childId, LocalDate date, String categoryName) {
+        List<TasksDTO> tasksDTOList = userTaskRepository.findTasksForChildByScheduledDateAndCategory(childId, date, categoryName).stream()
+                .map(schedule -> {
+                    Task task = taskRepository.findByTaskId(schedule.getTaskId());
+                    UserTask userTask = userTaskRepository.findByTask_TaskIdAndUserId(task.getTaskId(), childId);
+                    if (userTask == null) {
+                        throw new RuntimeException("UserTask not found for the given ID: " + task.getTaskId());
+                    }
+                    return new TasksDTO(
+                            task.getTaskId(),
+                            task.getCustomName(),
+                            task.getAssignedStars(),
+                            schedule.getScheduledDate(),
+                            userTask.getStatus().getName().equals("Completed"),
+                            task.getCategory().getName()
+                    );
+                })
+                .collect(Collectors.toList());
+        return tasksDTOList;
+    }
+
+
 }
 

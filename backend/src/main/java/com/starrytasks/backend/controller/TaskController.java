@@ -10,6 +10,7 @@ import com.starrytasks.backend.service.TaskService;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -56,13 +57,24 @@ public class TaskController {
         return taskService.findTasksScheduledBetweenAndChildId(startDate, endDate, childId);
     }
     @GetMapping("/child/{childId}/date")
-    public ResponseEntity<List<TasksDTO>> getTasksForChildByDate(@PathVariable Long childId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        List<TasksDTO> tasks = taskService.findTasksForChildByDate(childId, date);
+    public ResponseEntity<List<TasksDTO>> getTasksForChildByDate(
+            @PathVariable Long childId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(required = false) String categoryName) {
+
+        List<TasksDTO> tasks;
+        if (categoryName == null) {
+            tasks = taskService.findTasksForChildByDate(childId, date);
+        } else {
+            tasks = taskService.findTasksForChildByDateAndCategory(childId, date, categoryName);
+        }
+
         if (tasks.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(tasks);
     }
+
 
     @GetMapping("/mytasks")
     public ResponseEntity<?> getMyTasks(Authentication authentication, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
