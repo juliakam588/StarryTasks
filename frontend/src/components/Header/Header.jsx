@@ -26,7 +26,7 @@ const Header = () => {
         if (userRole === 'Parent') {
             navigate('/parent-rewards');
         } else if (userRole === 'Child') {
-            navigate('/rewards');
+            navigate('/myrewards');
         }
     };
 

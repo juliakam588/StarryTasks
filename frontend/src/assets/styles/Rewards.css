@@ -95,6 +95,14 @@
     color: #007BFF;
 }
 
+.delete-btn {
+    cursor: pointer;
+    margin-left: 100%;
+}
+.delete-btn:hover {
+    color: red;
+}
+
 .rewards-list {
     display: flex;
     margin-top: 115px;
@@ -162,12 +170,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 5%;
 }
 .child-rewards-content{
     width: 50%;
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 .reward-item{
     margin: 1rem;
@@ -191,19 +200,27 @@
     font: 700 24px Outfit, sans-serif;
 }
 
+.empty-image{
+    width: 200px;
+}
+
 @media (max-width: 991px) {
+    .child-rewards-content {
+        width: 100%;
+    }
+
     .exchange-btn {
         margin-top: 40px;
         white-space: initial;
+        width: 85%;
     }
 
     .reward-item {
-        padding: 19px 15px;
         flex: 0;
     }
 
     .rewards-list {
-
+        padding: 0;
         flex-wrap: wrap;
         margin-top: 40px;
         justify-content: center;

@@ -207,20 +207,19 @@
     .addtask-main-content {
         margin-top: 40px;
         padding: 20px 20px;
+        width: 100%
     }
 
     .add-task-name {
+        width: 100%;
         padding: 15px 20px;
-    }
-
-    .container1 {
-        margin: 100px 10px 0 10px;
     }
 
 
     .category-select {
         flex-wrap: wrap;
         padding: 15px 20px;
+        width: 100%;
     }
 
     .reward-container {
@@ -228,8 +227,11 @@
     }
 
     .add-task-button {
-        flex-wrap: wrap;
+        width: 100%;
         margin-top: 40px;
-        padding: 0 20px;
+    }
+    .checklist {
+        width: 100%;
+        flex-direction: column;
     }
 }

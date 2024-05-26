@@ -10,7 +10,6 @@
 }
 
 
-
 .login-card {
     display: flex;
     width: 100%;
@@ -43,26 +42,36 @@
     font: 400 64px Pacifico, sans-serif;
 }
 
-
 .login-box {
     display: flex;
     flex-direction: column;
-    width: 50%;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    min-height: 300px;
+    position: relative;
 }
 
 .input-field {
-    font-family: Outfit, sans-serif;
-    border-radius: 19px;
-    background-color: #fff;
-    margin-top: 15px;
-    align-items: start;
-    justify-content: center;
-    padding: 23px 35px;
-    font-size: 1rem;
-    width: 100%;
+    width: 328px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-
+.error-message {
+    color: red;
+    font-size: 0.875em;
+    margin: 5px 0 0 0;
+}
 
 .login-button {
     border-radius: 19px;
@@ -97,7 +106,6 @@
 
     .login-card {
         max-width: 100%;
-        margin-top: 40px;
         padding: 0;
     }
 
@@ -115,7 +123,7 @@
 
     .logo-container {
         margin: 0;
-
+        padding-bottom: 5%;
     }
 
 

@@ -1,5 +1,5 @@
 
-i-container{
+.i-container{
     display: flex;
     flex-direction: row;
 }
@@ -91,7 +91,6 @@ h2 {
 
 @media (max-width: 991px) {
     body {
-        background: white;
         margin-top: 90px;
         display: flex;
         flex-direction: column;
