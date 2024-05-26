@@ -32,5 +32,16 @@ export const getUserRole = () => {
     return decoded.role;
 };
 
+export const getUserInfo = () => {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+
+    const decoded = jwtDecode(token);
+    return {
+        role: decoded.role,
+        hasParent: decoded.hasParent
+    };
+};
+
 
 export default axiosInstance;

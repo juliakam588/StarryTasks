@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
-import axios from '../../axiosConfig';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios, { getUserInfo } from '../../axiosConfig';
 import houseSearchImage from '../assets/images/Family stress-pana.svg';
 import '../assets/styles/Invitation.css';
-import { useNavigate } from 'react-router-dom';
 
 const Invitation = () => {
     const [invitationCode, setInvitationCode] = useState('');
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const userInfo = getUserInfo();
+        if (!userInfo || (userInfo.role === 'Child' && userInfo.hasParent) || userInfo.role === 'Parent') {
+            navigate('/login');
+        }
+    }, [navigate]);
 
     const handleInputChange = (e) => {
         setInvitationCode(e.target.value);
@@ -16,7 +23,7 @@ const Invitation = () => {
         event.preventDefault();
         if (invitationCode.trim()) {
             try {
-                await axios.post(`/api/invitations/${invitationCode}/accept`, {}, {});
+                await axios.post(`/api/invitations/${invitationCode}/accept`, {});
                 alert('Successfully joined the family!');
                 navigate('/child');
             } catch (error) {

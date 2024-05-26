@@ -67,7 +67,7 @@ const HomePage = () => {
     return (
         <>
             <Header />
-            <main className="main-content">
+            <main className={`main-content ${tasks.length === 0 ? 'full-width' : ''}`}>
                 <div className="content-wrapper">
                     <section className="left-column">
                         <div className="greeting-section">
@@ -92,9 +92,11 @@ const HomePage = () => {
                             )}
                         </div>
                     </section>
-                    <section className="right-column">
-                        {tasks.length > 0 && <CongratulationsSection allTasksCompleted={allTasksCompleted} />}
-                    </section>
+                    {tasks.length > 0 && (
+                        <section className="right-column">
+                            <CongratulationsSection allTasksCompleted={allTasksCompleted} />
+                        </section>
+                    )}
                 </div>
             </main>
         </>

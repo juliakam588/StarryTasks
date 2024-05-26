@@ -8,7 +8,7 @@ import plusSign from '../assets/images/plus-sign.png';
 import dayjs from 'dayjs';
 import DateCalendarServerRequest from '../components/DateCalendarServerRequest';
 import Select from 'react-select';
-import { getUserRole } from '../../axiosConfig'; // Import funkcji, która pobiera rolę użytkownika
+import { getUserRole } from '../../axiosConfig';
 
 const ChildTasksPage = () => {
     const [tasks, setTasks] = useState([]);
@@ -45,7 +45,7 @@ const ChildTasksPage = () => {
     }, []);
 
     useEffect(() => {
-        const role = getUserRole(); // Pobieranie roli użytkownika
+        const role = getUserRole();
         setUserRole(role);
     }, []);
 

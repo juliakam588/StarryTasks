@@ -36,6 +36,8 @@ const Stats = () => {
         });
     };
 
+    const colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff6347", "#32cd32", "#8a2be2", "#ff4500", "#00ced1"];
+
     return (
         <>
             <Header />
@@ -54,7 +56,7 @@ const Stats = () => {
                             <Tooltip />
                             <Legend />
                             {Object.keys(stats.weeklyStars[0]).map((childName, index) => (
-                                <Bar key={childName} dataKey={childName} fill={index % 2 === 0 ? "#8884d8" : "#82ca9d"} />
+                                <Bar key={childName} dataKey={childName} fill={colors[index % colors.length]} />
                             ))}
                         </BarChart>
                     </ResponsiveContainer>
@@ -72,7 +74,7 @@ const Stats = () => {
                             <Tooltip />
                             <Legend />
                             {Object.keys(stats.weeklyIncompleteTasks[0]).map((childName, index) => (
-                                <Bar key={childName} dataKey={childName} fill={index % 2 === 0 ? "#ff6347" : "#32cd32"} />
+                                <Bar key={childName} dataKey={childName} fill={colors[index % colors.length]} />
                             ))}
                         </BarChart>
                     </ResponsiveContainer>
