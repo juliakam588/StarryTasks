@@ -8,22 +8,23 @@ import lombok.experimental.Accessors;
 
 @Data
 @Entity
-@Table(name = "reward_templates")
+@Table(name = "parent_reward_cost")
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class RewardTemplate {
+public class ParentRewardCost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rewardTemplateId;
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id", nullable = false)
+    private User parent;
+
+    @ManyToOne
+    @JoinColumn(name = "reward_id", nullable = false)
+    private Reward reward;
 
     @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
-    private String description;
-
-    @Column(nullable = false)
-    private Integer defaultCostInStars;
-
+    private Integer customCostInStars;
 }

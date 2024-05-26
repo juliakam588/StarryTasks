@@ -2,15 +2,10 @@ package com.starrytasks.backend.service.implementations;
 
 import com.starrytasks.backend.api.external.ChildRewardsDTO;
 import com.starrytasks.backend.api.external.RewardDTO;
-import com.starrytasks.backend.api.internal.Reward;
-import com.starrytasks.backend.api.internal.User;
-import com.starrytasks.backend.api.internal.UserReward;
-import com.starrytasks.backend.api.internal.UserStars;
+import com.starrytasks.backend.api.internal.*;
+import com.starrytasks.backend.mapper.ChildRewardsMapper;
 import com.starrytasks.backend.mapper.RewardMapper;
-import com.starrytasks.backend.repository.RewardRepository;
-import com.starrytasks.backend.repository.UserRewardRepository;
-import com.starrytasks.backend.repository.UserStarsRepository;
-import com.starrytasks.backend.service.FileUtils;
+import com.starrytasks.backend.repository.*;
 import com.starrytasks.backend.service.ParentService;
 import com.starrytasks.backend.service.RewardService;
 import lombok.RequiredArgsConstructor;
@@ -29,15 +24,49 @@ public class RewardServiceImpl implements RewardService {
     private final RewardMapper rewardMapper;
     private final UserStarsRepository userStarsRepository;
     private final ParentService parentService;
+    private final ParentRewardCostRepository parentRewardCostRepository;
+    private final UserRepository userRepository;
+    private final ChildRewardsMapper childRewardsMapper;
 
 
     @Override
-    public List<RewardDTO> getAllRewards() {
-        List<RewardDTO> rewardDTOs = rewardRepository.findAll().stream()
-                .filter(Reward::getIsDefault)
-                .map(rewardMapper::map)
-                .collect(Collectors.toList());
-        return rewardDTOs;
+    public List<RewardDTO> getAllRewards(Long userId, String role) {
+        List<Reward> rewards = rewardRepository.findAll();
+        if (!"Parent".equals(role)) {
+            User user = userRepository.findUserById(userId);
+            userId = user.getParent().getId();
+        }
+        List<ParentRewardCost> customCosts = parentRewardCostRepository.findByParentId(userId);
+
+        return rewards.stream().map(reward -> {
+                RewardDTO dto = rewardMapper.map(reward);
+                customCosts.stream()
+                        .filter(cost -> cost.getReward().getRewardId().equals(reward.getRewardId()))
+                        .findFirst()
+                        .ifPresent(cost -> dto.setCostInStars(cost.getCustomCostInStars()));
+                return dto;
+            }).collect(Collectors.toList());
+
+    }
+
+
+    @Override
+    public void updateCustomCostInStars(Long parentId, Long rewardId, Integer customCostInStars) {
+        Reward reward = rewardRepository.findRewardByRewardId(rewardId);
+        ParentRewardCost parentRewardCost = parentRewardCostRepository.findByParentIdAndReward(parentId, reward)
+                .orElse(new ParentRewardCost()
+                        .setParent(new User().setId(parentId))
+                        .setReward(new Reward().setRewardId(rewardId)));
+
+        parentRewardCost.setCustomCostInStars(customCostInStars);
+        parentRewardCostRepository.save(parentRewardCost);
+    }
+
+    @Override
+    public void deleteUserReward(Long userRewardId) {
+        UserReward userReward = userRewardRepository.findById(userRewardId)
+                .orElseThrow(() -> new IllegalArgumentException("User reward not found"));
+        userRewardRepository.delete(userReward);
     }
 
     @Override
@@ -53,12 +82,16 @@ public class RewardServiceImpl implements RewardService {
         Reward reward = rewardRepository.findById(rewardId)
                 .orElseThrow(() -> new IllegalArgumentException("Reward not found"));
 
-        if (userStars.getTotalStars() < reward.getDefaultCostInStars()) {
+        Integer costInStars = parentRewardCostRepository.findByParentIdAndReward(user.getParent().getId(), reward)
+                .map(ParentRewardCost::getCustomCostInStars)
+                .orElse(reward.getDefaultCostInStars());
+
+        if (userStars.getTotalStars() < costInStars) {
             throw new IllegalStateException("Not enough stars to exchange for this reward");
         }
 
-        userStars.setTotalStars(userStars.getTotalStars() - reward.getDefaultCostInStars());
-        userStars.setStarsSpent(userStars.getStarsSpent() + reward.getDefaultCostInStars());
+        userStars.setTotalStars(userStars.getTotalStars() - costInStars);
+        userStars.setStarsSpent(userStars.getStarsSpent() + costInStars);
         userStarsRepository.save(userStars);
 
         UserReward userReward = new UserReward();
@@ -68,6 +101,7 @@ public class RewardServiceImpl implements RewardService {
         userReward.setGranted(false);
         userRewardRepository.save(userReward);
     }
+
     @Override
     public void approveReward(Long userRewardId, Long parentId) {
         UserReward userReward = userRewardRepository.findById(userRewardId)
@@ -86,9 +120,13 @@ public class RewardServiceImpl implements RewardService {
         if (!parentService.isParentOfChild(parentId, userReward.getUser().getId())) {
             throw new RuntimeException("Parent is not authorized to reject this reward");
         }
+        Integer costInStars = parentRewardCostRepository.findByParentIdAndReward(parentId, userReward.getReward())
+                .map(ParentRewardCost::getCustomCostInStars)
+                .orElse(userReward.getReward().getDefaultCostInStars());
+
 
         UserStars userStars = userStarsRepository.findByUserId(userReward.getUser().getId());
-        userStars.setTotalStars(userStars.getTotalStars() + userReward.getReward().getDefaultCostInStars());
+        userStars.setTotalStars(userStars.getTotalStars() + costInStars);
         userStarsRepository.save(userStars);
 
         userRewardRepository.delete(userReward);
@@ -100,18 +138,7 @@ public class RewardServiceImpl implements RewardService {
 
         return children.stream().map(child -> {
             List<UserReward> rewards = userRewardRepository.findByUser(child);
-            List<RewardDTO> rewardDTOs = rewards.stream().map(userReward -> new RewardDTO()
-                            .setId(userReward.getReward().getRewardId())
-                            .setName(userReward.getReward().getName())
-                            .setCostInStars(userReward.getReward().getDefaultCostInStars())
-                            .setImageUrl(FileUtils.readFileFromLocation(userReward.getReward().getImageUrl()))
-                            .setIsDefault(userReward.getReward().getIsDefault())
-                            .setIsGranted(userReward.isGranted())
-                            .setUserRewardId(userReward.getUserRewardId())
-                            .setRedemptionDate(userReward.getRedemptionDate()))
-                    .collect(Collectors.toList());
-
-            return new ChildRewardsDTO(child.getId(), child.getUserProfile().getName(), rewardDTOs);
+            return childRewardsMapper.map(child, rewards);
         }).collect(Collectors.toList());
     }
 

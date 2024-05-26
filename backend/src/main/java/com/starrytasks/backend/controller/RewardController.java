@@ -2,6 +2,7 @@ package com.starrytasks.backend.controller;
 
 import com.starrytasks.backend.api.external.RewardDTO;
 import com.starrytasks.backend.api.external.StatusResponseDTO;
+import com.starrytasks.backend.api.external.UpdateRewardCostDTO;
 import com.starrytasks.backend.api.internal.User;
 import com.starrytasks.backend.api.internal.UserStars;
 import com.starrytasks.backend.service.ParentService;
@@ -25,9 +26,28 @@ public class RewardController {
     private final ParentService parentService;
 
     @GetMapping
-    public List<RewardDTO> getAllRewards() {
-        return rewardService.getAllRewards();
+    public ResponseEntity<List<RewardDTO>> getAllRewards(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        List<RewardDTO> rewards;
+        if (user.getRole().getName().equals("Parent")) {
+            rewards = rewardService.getAllRewards(user.getId(), "Parent");
+        } else {
+            rewards = rewardService.getAllRewards(user.getId(), "Child");
+        }
+        return ResponseEntity.ok(rewards);
     }
+
+    @PutMapping("/{rewardId}/cost")
+    public ResponseEntity<?> updateCustomCostInStars(@PathVariable Long rewardId, @RequestBody UpdateRewardCostDTO updateRewardCostDTO, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        if (user.getRole().getName().equals("Parent")) {
+            rewardService.updateCustomCostInStars(user.getId(), rewardId, updateRewardCostDTO.getCustomCostInStars());
+            return ResponseEntity.ok("Reward cost updated successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+
 
     @GetMapping("/stars")
     public ResponseEntity<?> getStars(@RequestParam Optional<Long> childId, Authentication authentication) {
@@ -76,6 +96,17 @@ public class RewardController {
             return ResponseEntity.badRequest().body("Failed to reject reward");
         }
     }
+
+    @DeleteMapping("/user-reward/{userRewardId}")
+    public ResponseEntity<?> deleteUserReward(@PathVariable Long userRewardId) {
+        try {
+            rewardService.deleteUserReward(userRewardId);
+            return ResponseEntity.ok().body("Reward deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error deleting reward: " + e.getMessage());
+        }
+    }
+
     @PostMapping
     public ResponseEntity<Object> addReward(@RequestBody RewardDTO rewardDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(new StatusResponseDTO(201));
@@ -91,4 +122,6 @@ public class RewardController {
     public ResponseEntity<Object> deleteCategory(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(new StatusResponseDTO(200));
     }
+
+
 }

@@ -5,7 +5,7 @@ import '../assets/styles/Rewards.css';
 import axios from '../../axiosConfig.js';
 import RewardItem from '../components/RewardItem';
 
-const RewardsPage = () => {
+const RewardsPageChild = () => {
     const [rewards, setRewards] = useState([]);
     const [stars, setStars] = useState(0);
     const [selectedRewardId, setSelectedRewardId] = useState(null);
@@ -68,8 +68,16 @@ const RewardsPage = () => {
                 </section>
                 <section className="rewards-list">
                     {rewards.map((reward) => (
-                        <RewardItem key={reward.id} id={reward.id} name={reward.name} imgSrc={reward.imageUrl}
-                                    progress={Math.round((stars / reward.costInStars) * 100)} onSelectReward={setSelectedRewardId} isSelected={selectedRewardId === reward.id}/>
+                        <RewardItem
+                            key={reward.id}
+                            id={reward.id}
+                            name={reward.name}
+                            imgSrc={reward.imageUrl}
+                            progress={Math.round((stars / reward.costInStars) * 100)}
+                            onSelectReward={setSelectedRewardId}
+                            isSelected={selectedRewardId === reward.id}
+                            costInStars={reward.costInStars}
+                        />
                     ))}
                 </section>
                 {selectedRewardId !== null &&
@@ -79,4 +87,4 @@ const RewardsPage = () => {
     );
 };
 
-export default RewardsPage;
+export default RewardsPageChild;
