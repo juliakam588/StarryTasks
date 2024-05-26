@@ -19,4 +19,10 @@ public class UserProfileMapper {
         }
         return dto;
     }
+    public UserProfileDTO map(UserProfile userProfile) {
+        UserProfileDTO dto = new UserProfileDTO();
+        dto.setId(userProfile.getId());
+        dto.setName(userProfile.getName());
+        return dto;
+    }
 }

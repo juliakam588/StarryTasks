@@ -9,5 +9,7 @@ import java.util.List;
 public interface UserService {
     List<UserDTO> findChildrenByParentId(Long parentId);
 
-    void uploadBookCoverPicture(MultipartFile file, Authentication connectedUser);
+    void uploadAvatarPicture(MultipartFile file, Authentication connectedUser);
+
+    UserDTO getUserById(Long id);
 }

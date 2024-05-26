@@ -17,5 +17,5 @@ public class UserMapper {
                 .setId(user.getId())
                 .setEmail(user.getEmail());
     }
-    
+
 }

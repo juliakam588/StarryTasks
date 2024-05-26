@@ -2,6 +2,7 @@ package com.starrytasks.backend.service.implementations;
 
 import com.starrytasks.backend.api.external.*;
 import com.starrytasks.backend.api.internal.*;
+import com.starrytasks.backend.mapper.TaskMapper;
 import com.starrytasks.backend.rabbitmq.NotificationProducer;
 import com.starrytasks.backend.repository.*;
 import com.starrytasks.backend.service.TaskService;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
+    private final TaskMapper taskMapper;
     private final UserTaskRepository userTaskRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
@@ -30,29 +32,20 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void saveTask(AddTaskDTO taskDTO, Long parentId) {
         User parent = userRepository.findById(parentId).orElseThrow(() -> new RuntimeException("User not found"));
-
         User child = userRepository.findUserById(taskDTO.getChildId());
+        Category category = categoryRepository.findByName(taskDTO.getCategoryName());
+        Status status = new Status().setStatusId(2L).setName("Processed");
 
         for (DayOfWeek day : taskDTO.getScheduledDays()) {
             List<LocalDate> dates = calculateDates(day, taskDTO.getStartDate(), taskDTO.getEndDate());
             for (LocalDate date : dates) {
-                Task task = new Task();
-                task.setCustomName(taskDTO.getName());
-                task.setAssignedStars(taskDTO.getStars());
-                task.setCategory(categoryRepository.findByName(taskDTO.getCategoryName()));
-                task.setUser(parent);
+                Task task = taskMapper.mapToTask(taskDTO, parent, category);
                 taskRepository.save(task);
 
-                TaskSchedule schedule = new TaskSchedule();
-                schedule.setTask(task);
-                schedule.setScheduledDate(date);
+                TaskSchedule schedule = taskMapper.mapToTaskSchedule(task, date);
                 taskScheduleRepository.save(schedule);
 
-                UserTask userTask = new UserTask();
-                userTask.setTask(task);
-                userTask.setUser(child);
-                userTask.setAssignedDate(LocalDate.now());
-                userTask.setStatus(new Status().setStatusId(2L).setName("Processed"));
+                UserTask userTask = taskMapper.mapToUserTask(task, child, status);
                 userTaskRepository.save(userTask);
             }
         }
@@ -65,13 +58,9 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new RuntimeException("UserTask not found for the given ID: " + userTaskId));
         Task task = userTask.getTask();
         TaskSchedule taskSchedule = taskScheduleRepository.findTaskScheduleByTask(task);
-
-
-        task.setCustomName(userTaskDTO.getTaskName());
-        task.setAssignedStars(userTaskDTO.getAssignedStars());
-        task.setCategory(categoryRepository.findByName(userTaskDTO.getCategoryName()));
-
-        taskSchedule.setScheduledDate(userTaskDTO.getScheduledDate());
+        Category category = categoryRepository.findByName(userTaskDTO.getCategoryName());
+        taskMapper.updateTaskFromDTO(task, userTaskDTO, category);
+        taskMapper.updateTaskScheduleFromDTO(taskSchedule, userTaskDTO);
 
         taskRepository.save(task);
         userTaskRepository.save(userTask);
@@ -82,20 +71,9 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskDetailsDTO> getTasksByChildId(Long childId) {
         List<UserTask> userTasks = userTaskRepository.findByUserId(childId);
-        return userTasks.stream().map(ut -> {
-            Task task = ut.getTask();
-            TaskDetailsDTO dto = new TaskDetailsDTO();
-            dto.setTaskId(task.getTaskId());
-            dto.setTaskName(task.getCustomName());
-            dto.setAssignedStars(task.getAssignedStars());
-            dto.setScheduledDays(task.getSchedules().stream().map(TaskSchedule::getScheduledDate).map(LocalDate::getDayOfWeek).collect(Collectors.toSet()));
-            dto.setCompleted(ut.getStatus().getName().equals("Completed"));
-            dto.setCategoryName(task.getCategory() != null ? task.getCategory().getName() : null);
-            dto.setChildId(childId);
-            dto.setStartDate(task.getSchedules().stream().min(Comparator.comparing(TaskSchedule::getScheduledDate)).map(TaskSchedule::getScheduledDate).orElse(null));
-            dto.setEndDate(task.getSchedules().stream().max(Comparator.comparing(TaskSchedule::getScheduledDate)).map(TaskSchedule::getScheduledDate).orElse(null));
-            return dto;
-        }).collect(Collectors.toList());
+        return userTasks.stream()
+                .map(taskMapper::toTaskDetailsDTO)
+                .collect(Collectors.toList());
     }
 
 
@@ -130,26 +108,6 @@ public class TaskServiceImpl implements TaskService {
         return dates;
     }
 
-    public List<TasksDTO> findTasksForChildByDate(Long childId, LocalDate date) {
-        List<TasksDTO> tasksDTOList = userTaskRepository.findTasksForChildByScheduledDate(childId, date).stream()
-                .map(schedule -> {
-                    Task task = taskRepository.findByTaskId(schedule.getTaskId());
-                    UserTask userTask = userTaskRepository.findByTask_TaskIdAndUserId(task.getTaskId(), childId);
-                    if (userTask == null) {
-                        throw new RuntimeException("UserTask not found for the given ID: " + task.getTaskId());
-                    }
-                    return new TasksDTO(
-                            task.getTaskId(),
-                            task.getCustomName(),
-                            task.getAssignedStars(),
-                            schedule.getScheduledDate(),
-                            userTask.getStatus().getName().equals("Completed"),
-                            task.getCategory().getName()
-                    );
-                })
-                .collect(Collectors.toList());
-        return tasksDTOList;
-    }
 
     @Override
     public List<TasksDTO> findTasksScheduledBetweenAndChildId(LocalDate startDate, LocalDate endDate, Long childId) {
@@ -199,39 +157,24 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task not found for the given ID: " + taskId));
 
-        TasksDTO dto = new TasksDTO();
-        dto.setTaskId(task.getTaskId());
-        dto.setTaskName(task.getCustomName());
-        dto.setAssignedStars(task.getAssignedStars());
-        dto.setCategoryName(task.getCategory() != null ? task.getCategory().getName() : null);
-        dto.setScheduledDate(task.getSchedules().stream()
-                .map(TaskSchedule::getScheduledDate)
-                .findFirst()
-                .orElse(null));
-
-        return dto;
+        return taskMapper.toTasksDTO(task);
+    }
+    @Override
+    public List<TasksDTO> findTasksForChildByDateAndCategory(Long childId, LocalDate date, String categoryName) {
+        return findTasks(childId, date, categoryName);
     }
 
     @Override
-    public List<TasksDTO> findTasksForChildByDateAndCategory(Long childId, LocalDate date, String categoryName) {
-        List<TasksDTO> tasksDTOList = userTaskRepository.findTasksForChildByScheduledDateAndCategory(childId, date, categoryName).stream()
-                .map(schedule -> {
-                    Task task = taskRepository.findByTaskId(schedule.getTaskId());
-                    UserTask userTask = userTaskRepository.findByTask_TaskIdAndUserId(task.getTaskId(), childId);
-                    if (userTask == null) {
-                        throw new RuntimeException("UserTask not found for the given ID: " + task.getTaskId());
-                    }
-                    return new TasksDTO(
-                            task.getTaskId(),
-                            task.getCustomName(),
-                            task.getAssignedStars(),
-                            schedule.getScheduledDate(),
-                            userTask.getStatus().getName().equals("Completed"),
-                            task.getCategory().getName()
-                    );
-                })
-                .collect(Collectors.toList());
-        return tasksDTOList;
+    public List<TasksDTO> findTasksForChildByDate(Long childId, LocalDate date) {
+        return findTasks(childId, date, null);
+    }
+
+    private List<TasksDTO> findTasks(Long childId, LocalDate date, String categoryName) {
+        if (categoryName == null) {
+            return userTaskRepository.findTasksForChildByScheduledDate(childId, date);
+        } else {
+            return userTaskRepository.findTasksForChildByScheduledDateAndCategory(childId, date, categoryName);
+        }
     }
 
 

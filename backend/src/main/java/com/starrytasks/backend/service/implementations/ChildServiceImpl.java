@@ -21,9 +21,7 @@ public class ChildServiceImpl implements ChildService {
     public UserProfileDTO getChildProfile(Long childId) {
         UserProfile userProfile = userProfileRepository.findById(childId).orElse(null);
         if (userProfile != null) {
-            return new UserProfileDTO()
-                    .setId(userProfile.getId())
-                    .setName(userProfile.getName());
+            return userProfileMapper.map(userProfile);
 
         } else {
             return null;

@@ -9,12 +9,14 @@ import com.starrytasks.backend.repository.UserRepository;
 import com.starrytasks.backend.service.AuthenticationService;
 import com.starrytasks.backend.service.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +33,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public AuthenticationResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("User already exists!");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists!");
         }
 
         UserProfile userProfile = new UserProfile();

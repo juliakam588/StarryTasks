@@ -6,15 +6,18 @@ import com.starrytasks.backend.api.internal.Invitation;
 import com.starrytasks.backend.api.internal.User;
 import com.starrytasks.backend.api.internal.UserStars;
 import com.starrytasks.backend.mapper.InvitationMapper;
+import com.starrytasks.backend.mapper.UserMapper;
 import com.starrytasks.backend.repository.InvitationRepository;
 import com.starrytasks.backend.repository.UserRepository;
 import com.starrytasks.backend.repository.UserStarsRepository;
 import com.starrytasks.backend.service.InvitationService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.NonUniqueResultException;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -26,6 +29,7 @@ public class InvitationServiceImpl implements InvitationService {
     private final InvitationRepository invitationRepository;
     private final UserRepository userRepository;
     private final UserStarsRepository userStarsRepository;
+    private final UserMapper userMapper;
 
 
     @Override
@@ -40,10 +44,6 @@ public class InvitationServiceImpl implements InvitationService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if(!hasUserValidInvitation(user)) {
-
-        }
-
         String invitationCode = generateRandomCode(8);
         LocalDate expirationDate = LocalDate.now().plusDays(30);
 
@@ -57,9 +57,7 @@ public class InvitationServiceImpl implements InvitationService {
 
         return new InvitationDTO()
                 .setInvitationCode(invitationCode)
-                .setGeneratedByUser(new UserDTO().
-                        setId(user.getId())
-                        .setEmail(user.getEmail()))
+                .setGeneratedByUser(userMapper.map(user))
                 .setExpirationDate(expirationDate)
                 .setActive(true);
     }
@@ -108,16 +106,28 @@ public class InvitationServiceImpl implements InvitationService {
 
     @Override
     public boolean hasUserValidInvitation(User user) {
-        return invitationRepository.findInvitationByGeneratedByUser(user)
-                .map(Invitation::isActive)
-                .orElse(false);
+        List<Invitation> invitations = invitationRepository.findInvitationsByGeneratedByUser(user);
+        if (invitations.isEmpty()) {
+            return false;
+        } else if (invitations.size() == 1) {
+            return invitations.get(0).isActive();
+        } else {
+            invitationRepository.deleteAll(invitations);
+            return false;
+        }
     }
 
     @Override
     public InvitationDTO getInvitationByUser(User user) {
-        return invitationRepository.findInvitationByGeneratedByUser(user)
-                .map(invitationMapper::map)
-                .orElseThrow(() -> new RuntimeException("Invitation not found"));
+        List<Invitation> invitations = invitationRepository.findInvitationsByGeneratedByUser(user);
+        if (invitations.isEmpty()) {
+            throw new RuntimeException("Invitation not found");
+        } else if (invitations.size() == 1) {
+            return invitationMapper.map(invitations.get(0));
+        } else {
+            invitationRepository.deleteAll(invitations);
+            throw new RuntimeException("Multiple invitations found and deleted");
+        }
     }
 
 }

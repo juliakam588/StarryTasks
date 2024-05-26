@@ -10,7 +10,6 @@ import com.starrytasks.backend.service.TaskService;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

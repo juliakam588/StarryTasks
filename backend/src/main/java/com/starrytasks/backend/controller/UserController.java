@@ -44,11 +44,11 @@ public class UserController {
     }
 
     @PostMapping(value = "/avatar", consumes = "multipart/form-data")
-    public ResponseEntity<?> uploadBookCoverPicture(
+    public ResponseEntity<?> uploadAvatarPicture(
             @RequestPart("file") MultipartFile file,
             Authentication connectedUser
     ) {
-        userService.uploadBookCoverPicture(file, connectedUser);
+        userService.uploadAvatarPicture(file, connectedUser);
         return ResponseEntity.accepted().build();
     }
 

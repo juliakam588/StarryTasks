@@ -37,6 +37,7 @@ public class SecurityConfig {
                         )
                         .permitAll()
                         .requestMatchers("/api/parent/**").hasAuthority("Parent")
+                        .requestMatchers("/api/stats/**").hasAuthority("Parent")
                         .requestMatchers("/api/rewards/parent").hasAuthority("Parent")
                         .requestMatchers("/api/child/**").hasAuthority("Child")
                         .anyRequest()

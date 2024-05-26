@@ -54,8 +54,6 @@ public class StatsServiceImpl implements StatsService {
             LocalDate weekEnd = weekStart.plusDays(6);
 
 
-            System.out.println(weekStart);
-            System.out.println(weekEnd);
             for (User child : children) {
                 Long childId = child.getId();
                 String childName = child.getUserProfile().getName();
@@ -67,9 +65,6 @@ public class StatsServiceImpl implements StatsService {
                 for (UserTask userTask : userTasks) {
                     TaskSchedule taskSchedule = taskScheduleRepository.findTaskScheduleByTask(userTask.getTask());
                     LocalDate taskDate = taskSchedule.getScheduledDate();
-                    System.out.println("TaskDate???" + taskDate);
-                    System.out.println(userTask.getTask().getCustomName());
-
 
                     if (!taskDate.isBefore(weekStart) && !taskDate.isAfter(weekEnd) && !taskDate.isAfter(LocalDate.now())) {
                         if (userTask.getStatus().getName().equals("Completed")) {

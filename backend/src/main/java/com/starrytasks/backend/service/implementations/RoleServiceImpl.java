@@ -13,7 +13,9 @@ import com.starrytasks.backend.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +31,7 @@ public class RoleServiceImpl implements RoleService {
     public List<RoleDTO> getAllRoles() {
         List<Role> roles = roleRepository.findAll();
         return roles.stream()
-                .map(role -> roleMapper.map(role))
+                .map(roleMapper::map)
                 .collect(Collectors.toList());
     }
 
@@ -41,16 +43,17 @@ public class RoleServiceImpl implements RoleService {
         user.setRole(role);
         userRepository.save(user);
 
-        return jwtService.generateToken(user);
+
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("role", user.getRole().getName());
+        extraClaims.put("hasParent", user.getParent() != null);
+
+        return jwtService.generateToken(extraClaims, user);
     }
 
     @Override
     public UserDetailsDTO getAdditionalUserDetails(User user) {
-        UserDetailsDTO userDetails = new UserDetailsDTO();
-        userDetails.setRole(user.getRole());
-        userDetails.setHasParent(user.getParent() != null);
-        return userDetails;
+        return roleMapper.map(user);
     }
-
 
 }
