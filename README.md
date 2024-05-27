@@ -1,4 +1,6 @@
-# StarryTasks
+# StarryTasks 
+
+<img src="https://github.com/juliakam588/StarryTasks/assets/77432872/c47c352b-d782-44d6-9dde-9db38bb0f9d9" alt="StarryTasks" width="100" height="100">
 
 StarryTasks is a task and reward management application for children, enabling parents and children to collaborate and monitor progress.
 
