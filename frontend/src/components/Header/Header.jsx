@@ -47,7 +47,10 @@ const Header = () => {
                     <li>
                         <button onClick={handleRewardsClick}>Rewards</button>
                     </li>
+                    {userRole === 'Parent' && <li><Link to="/rewards">Edit Rewards</Link></li>}
+
                     {userRole === 'Parent' && <li><Link to="/stats">Stats</Link></li>}
+
                     <li>
                         <button onClick={handleLogout}>Logout</button>
                     </li>
